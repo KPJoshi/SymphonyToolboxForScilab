@@ -6,6 +6,9 @@ libsymphonytools.c
 # Libraries
 *.so
 
+# gedit temporary files
+*~
+
 # Other
 *.pdf
 *.gz
