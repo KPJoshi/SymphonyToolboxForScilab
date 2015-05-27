@@ -17,16 +17,16 @@ extern "C" {
 #include <localization.h>
 
 //error management variables
-SciErr sciErr;
-int iRet;
+static SciErr sciErr;
+static int iRet;
 
 //data declarations
-int *varAddress=NULL,numVars,numConstr,*conMatrixColStart=NULL,*conMatrixRowIndex=NULL,*isIntVarBool=NULL,*conTypeInputLen=NULL,colIter,rowIter,inputMatrixCols,inputMatrixRows;
-double infinity,inputDouble,*objective=NULL,*lowerBounds=NULL,*upperBounds=NULL,*conRHS=NULL,*conRange=NULL,*conVals=NULL;
-char *conType=NULL,*isIntVar=NULL,**conTypeInput=NULL;
+static int *varAddress=NULL,numVars,numConstr,*conMatrixColStart=NULL,*conMatrixRowIndex=NULL,*isIntVarBool=NULL,*conTypeInputLen=NULL,colIter,rowIter,inputMatrixCols,inputMatrixRows;
+static double infinity,inputDouble,*objective=NULL,*lowerBounds=NULL,*upperBounds=NULL,*conRHS=NULL,*conRange=NULL,*conVals=NULL;
+static char *conType=NULL,*isIntVar=NULL,**conTypeInput=NULL;
 
 //delete all allocd arrays before exit, and return output argument
-void cleanupBeforeExit(){
+static void cleanupBeforeExit(){
 	if(conMatrixColStart) delete[] conMatrixColStart;
 	if(conMatrixRowIndex) delete[] conMatrixRowIndex;
 	if(isIntVar) delete[] isIntVar;
@@ -39,7 +39,7 @@ void cleanupBeforeExit(){
 }
 
 //both basic and advanced loader use this code
-int commonCodePart1(){
+static int commonCodePart1(){
 	
 	//ensure that environment is active
 	if(global_sym_env==NULL){
@@ -106,7 +106,7 @@ int commonCodePart1(){
 }
 
 //both basic and advanced loader use this code
-int commonCodePart2(){
+static int commonCodePart2(){
 	//get input 3: lower bounds of variables
 	sciErr = getVarAddressFromPosition(pvApiCtx, 3, &varAddress);
 	if (sciErr.iErr)
