@@ -2,7 +2,6 @@
  * Symphony Toolbox
  * <Description>
  * <Author(s)>
- * <Creation/Edit date>
  */
 
 #include "symphony.h"

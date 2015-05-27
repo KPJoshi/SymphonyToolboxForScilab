@@ -28,6 +28,8 @@ tbx_build_gateway("symphonytools", ..
 		"sym_getInfinity","sci_sym_getInfinity";
 		"sym_getVarSoln","sci_sym_getVarSoln";
 		"sym_getObjVal","sci_sym_getObjVal";
+		"sym_setObjCoeff","sci_sym_setObjCoeff";
+		"sym_setObjSense","sci_sym_setObjSense";
 	], ..
 	[
 		"globals.cpp",
@@ -40,6 +42,7 @@ tbx_build_gateway("symphonytools", ..
 		"sci_vartype.cpp",
 		"sci_sym_getinfinity.cpp",
 		"sci_sym_solution.cpp",
+		"sci_sym_setobj.cpp",
 	], ..
 	get_absolute_file_path("builder.sce"), [], ..
 	["-fopenmp -lSym -lCgl -lOsiClp -lClp -lOsi -lCoinUtils -lbz2 -lz -llapack -lblas -lm"], ..
