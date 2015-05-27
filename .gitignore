@@ -1,0 +1,11 @@
+# Scilab generates these by itself
+cleaner.sce
+loader.sce
+libsymphonytools.c
+
+# Libraries
+*.so
+
+# Other
+*.pdf
+*.gz
