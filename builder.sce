@@ -1,8 +1,8 @@
-//Symphony toolbox builder
-//By Keyur Joshi and Sai Kiran
-//Last edit on 22-5-15
 mode(-1)
 lines(0)
+
+//Symphony toolbox builder
+//By Keyur Joshi, Sai Kiran, and Iswarya
 
 WITHOUT_AUTO_PUTLHSVAR = %t;
 
@@ -37,6 +37,20 @@ tbx_build_gateway("symphonytools", ..
 		"sym_getRowRange","sci_sym_get_dbl_arr";
 		"sym_getRowLower","sci_sym_get_dbl_arr";
 		"sym_getRowUpper","sci_sym_get_dbl_arr";
+		"sym_set_defaults","sci_sym_set_defaults";
+		"sym_set_int_param","sci_sym_set_int_param";
+		"sym_get_int_param","sci_sym_get_int_param";
+		"sym_set_dbl_param","sci_sym_set_dbl_param";
+		"sym_get_dbl_param","sci_sym_get_dbl_param";
+		"sym_set_str_param","sci_sym_set_str_param";
+		"sym_get_str_param","sci_sym_get_str_param";
+		"sym_setObjCoeff","sci_sym_setObjCoeff";
+		"sym_setObjSense","sci_sym_setObjSense";
+		"sym_setVarLower","sci_sym_setVarBound";
+		"sym_setVarUpper","sci_sym_setVarBound";
+		"sym_setConstrLower","sci_sym_setConstrBound";
+		"sym_setConstrUpper","sci_sym_setConstrBound";
+		"sym_setConstrType","sci_sym_setConstrType";
 	], ..
 	[
 		"globals.cpp",
@@ -50,10 +64,11 @@ tbx_build_gateway("symphonytools", ..
 		"sci_sym_getinfinity.cpp",
 		"sci_sym_solution.cpp",
 		"sym_data_query_functions.cpp"
+		"sci_sym_set_variables.cpp",
+		"sci_sym_setobj.cpp",
+		"sci_sym_varbounds.cpp",
+		"sci_sym_rowmod.cpp",
 	], ..
-	get_absolute_file_path("builder.sce"), [], ..
-	["-fopenmp -lSym -lCgl -lOsiClp -lClp -lOsi -lCoinUtils -lbz2 -lz -llapack -lblas -lm"], ..
-	["-fpermissive -w -DSYMPHONY_BUILD -I/usr/include/coin"], ..
-	[], "g++");
+	get_absolute_file_path("builder.sce"), [], ["-lSym"], ["-fpermissive -I/usr/include/coin"], [], "g++");
 
 clear WITHOUT_AUTO_PUTLHSVAR;
