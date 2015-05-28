@@ -211,10 +211,12 @@ static int commonCodePart2(){
 		cleanupBeforeExit();return 1;
 	}
 	for(colIter=0;colIter<numVars;colIter++)
+	{
 		if(isIntVarBool[colIter])
 			isIntVar[colIter]=TRUE;
 		else
-			isIntVar[rowIter]=FALSE;
+			isIntVar[colIter]=FALSE;
+	}
 	
 	//get input 8: constraint type (less than/equal to/more than)
 	sciErr = getVarAddressFromPosition(pvApiCtx, 8, &varAddress);
