@@ -45,7 +45,7 @@ int sci_sym_getVarSoln(char *fname){
 	solution=new double[numVars];
 	iRet=sym_get_col_solution(global_sym_env,solution);
 	if(iRet==FUNCTION_TERMINATED_ABNORMALLY){
-		Scierror(999, "An error occured. Has the problem been solved?\n");
+		Scierror(999, "An error occured. Has the problem been solved? Is the problem feasible?\n");
 		delete[] solution;
 		return 1;
 	}
@@ -88,7 +88,7 @@ int sci_sym_getObjVal(char *fname){
 	//code to process input
 	iRet=sym_get_obj_val(global_sym_env,&solution);
 	if(iRet==FUNCTION_TERMINATED_ABNORMALLY){
-		Scierror(999, "An error occured. Has the problem been loaded AND solved?\n");
+		Scierror(999, "An error occured. Has the problem been loaded and solved? Is the problem feasible?\n");
 		return 1;
 	}
 	
