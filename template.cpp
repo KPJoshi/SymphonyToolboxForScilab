@@ -4,9 +4,6 @@
  * <Author(s)>
  * <Creation/Edit date>
  */
-//
-//
-//
 #include "symphony.h"
 
 extern sym_environment* global_sym_env; //defined in globals.cpp
