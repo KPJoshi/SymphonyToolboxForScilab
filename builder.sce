@@ -59,9 +59,6 @@ tbx_build_gateway("symphonytools", ..
 		"sci_sym_varbounds.cpp",
 		"sci_sym_rowmod.cpp",
 	], ..
-	get_absolute_file_path("builder.sce"), [], ..
-	["-fopenmp -lSym -lCgl -lOsiClp -lClp -lOsi -lCoinUtils -lbz2 -lz -llapack -lblas -lm"], ..
-	["-fpermissive -w -DSYMPHONY_BUILD -I/usr/include/coin"], ..
-	[], "g++");
+	get_absolute_file_path("builder.sce"), [], ["-lSym"], ["-fpermissive -I/usr/include/coin"], [], "g++");
 
 clear WITHOUT_AUTO_PUTLHSVAR;
