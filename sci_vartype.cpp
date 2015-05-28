@@ -21,7 +21,7 @@ static SciErr sciErr;
 static int iRet;
 
 //data declarations
-static int *varAddress,varIndex,retVal;
+static int *varAddress,varIndex,numVars,retVal;
 static double inputDouble;
 
 static int commonCodePart1(){
@@ -53,7 +53,15 @@ static int commonCodePart1(){
 		Scierror(999, "Wrong type for input argument #1: A positive integer stored in a double is expected.\n");
 		return 1;
 	}
-	varIndex=((unsigned int)inputDouble)-1;
+	varIndex=(unsigned int)inputDouble;
+	iRet=sym_get_num_cols(global_sym_env,&numVars);
+	if(iRet==FUNCTION_TERMINATED_ABNORMALLY){
+		Scierror(999, "An error occured. Has a problem been loaded?\n");
+		return 1;
+	}else if(varIndex>=numVars){
+		Scierror(999, "An error occured. Variable index must be a number between 0 and %d.\n",numVars-1);
+		return 1;
+	}
 	
 	return 0;
 }
