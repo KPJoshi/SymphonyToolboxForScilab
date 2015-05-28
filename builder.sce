@@ -28,6 +28,15 @@ tbx_build_gateway("symphonytools", ..
 		"sym_getInfinity","sci_sym_getInfinity";
 		"sym_getVarSoln","sci_sym_getVarSoln";
 		"sym_getObjVal","sci_sym_getObjVal";
+		"sym_getNumRows","sci_sym_get_num_int";
+		"sym_getNumCols","sci_sym_get_num_int";
+		"sym_getNumElements","sci_sym_get_num_int";
+		"sym_getColLower","sci_sym_get_dbl_arr";
+		"sym_getColUpper","sci_sym_get_dbl_arr";
+		"sym_getRhs","sci_sym_get_dbl_arr";
+		"sym_getRowRange","sci_sym_get_dbl_arr";
+		"sym_getRowLower","sci_sym_get_dbl_arr";
+		"sym_getRowUpper","sci_sym_get_dbl_arr";
 	], ..
 	[
 		"globals.cpp",
@@ -40,6 +49,7 @@ tbx_build_gateway("symphonytools", ..
 		"sci_vartype.cpp",
 		"sci_sym_getinfinity.cpp",
 		"sci_sym_solution.cpp",
+		"sym_data_query_functions.cpp"
 	], ..
 	get_absolute_file_path("builder.sce"), [], ..
 	["-fopenmp -lSym -lCgl -lOsiClp -lClp -lOsi -lCoinUtils -lbz2 -lz -llapack -lblas -lm"], ..
