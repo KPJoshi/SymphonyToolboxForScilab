@@ -1,8 +1,8 @@
-//Symphony toolbox builder
-//By Keyur Joshi and Sai Kiran
-//Last edit on 22-5-15
 mode(-1)
 lines(0)
+
+//Symphony toolbox builder
+//By Keyur Joshi, Sai Kiran, and Iswarya
 
 WITHOUT_AUTO_PUTLHSVAR = %t;
 
@@ -39,6 +39,9 @@ tbx_build_gateway("symphonytools", ..
 		"sym_setObjSense","sci_sym_setObjSense";
 		"sym_setVarLower","sci_sym_setVarBound";
 		"sym_setVarUpper","sci_sym_setVarBound";
+		"sym_setConstrLower","sci_sym_setConstrBound";
+		"sym_setConstrUpper","sci_sym_setConstrBound";
+		"sym_setConstrType","sci_sym_setConstrType";
 	], ..
 	[
 		"globals.cpp",
@@ -54,6 +57,7 @@ tbx_build_gateway("symphonytools", ..
 		"sci_sym_set_variables.cpp",
 		"sci_sym_setobj.cpp",
 		"sci_sym_varbounds.cpp",
+		"sci_sym_rowmod.cpp",
 	], ..
 	get_absolute_file_path("builder.sce"), [], ..
 	["-fopenmp -lSym -lCgl -lOsiClp -lClp -lOsi -lCoinUtils -lbz2 -lz -llapack -lblas -lm"], ..
