@@ -28,6 +28,13 @@ tbx_build_gateway("symphonytools", ..
 		"sym_getInfinity","sci_sym_getInfinity";
 		"sym_getVarSoln","sci_sym_getVarSoln";
 		"sym_getObjVal","sci_sym_getObjVal";
+		"sym_set_defaults","sci_sym_set_defaults";
+		"sym_set_int_param","sci_sym_set_int_param";
+		"sym_get_int_param","sci_sym_get_int_param";
+		"sym_set_dbl_param","sci_sym_set_dbl_param";
+		"sym_get_dbl_param","sci_sym_get_dbl_param";
+		"sym_set_str_param","sci_sym_set_str_param";
+		"sym_get_str_param","sci_sym_get_str_param";
 		"sym_setObjCoeff","sci_sym_setObjCoeff";
 		"sym_setObjSense","sci_sym_setObjSense";
 		"sym_setVarLower","sci_sym_setVarBound";
@@ -44,6 +51,7 @@ tbx_build_gateway("symphonytools", ..
 		"sci_vartype.cpp",
 		"sci_sym_getinfinity.cpp",
 		"sci_sym_solution.cpp",
+		"sci_sym_set_variables.cpp",
 		"sci_sym_setobj.cpp",
 		"sci_sym_varbounds.cpp",
 	], ..
