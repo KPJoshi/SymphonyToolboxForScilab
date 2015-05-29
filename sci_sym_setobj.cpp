@@ -72,13 +72,13 @@ int sci_sym_setObjCoeff(char *fname){
 	}
 	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
 	{
-		Scierror(999, "Wrong type for input argument #1: A double is expected.\n");
+		Scierror(999, "Wrong type for input argument #2: A double is expected.\n");
 		return 1;
 	}
 	iRet = getScalarDouble(pvApiCtx, varAddress, &newCoeff);
 	if(iRet)
 	{
-		Scierror(999, "Wrong type for input argument #1: A double is expected.\n");
+		Scierror(999, "Wrong type for input argument #2: A double is expected.\n");
 		return 1;
 	}
 	

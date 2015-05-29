@@ -186,4 +186,181 @@ int sci_sym_addConstr(char *fname){
 	return 0;
 }
 
+int sci_sym_addVar(char *fname){
+	
+	//error management variable
+	SciErr sciErr;
+	int iRet;
+	
+	//data declarations
+	int *varAddress,numConstr,nonZeros,*itemsPerRow,*colIndex,*rowIndex,inputRows,inputCols,rowIter,arrayIter,isInt;
+	double inputDouble,*matrix,uBound,lBound,objCoeff;
+	char *varName,isIntChar;
+	
+	//ensure that environment is active
+	if(global_sym_env==NULL){
+		sciprint("Error: Symphony environment not initialized. Please run 'sym_open()' first.\n");
+		return 1;
+	}
+	
+	//code to check arguments and get them
+	CheckInputArgument(pvApiCtx,6,6) ;
+	CheckOutputArgument(pvApiCtx,1,1) ;
+	
+	//get number of rows
+	iRet=sym_get_num_rows(global_sym_env,&numConstr);
+	if(iRet==FUNCTION_TERMINATED_ABNORMALLY){
+		Scierror(999, "An error occured. Has a problem been loaded?\n");
+		return 1;
+	}
+	
+	//get input 1: sparse matrix of new variable coefficients constraints
+	sciErr = getVarAddressFromPosition(pvApiCtx, 1, &varAddress);
+	if (sciErr.iErr)
+	{
+		printError(&sciErr, 0);
+		return 1;
+	}
+	if ( !isSparseType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
+	{
+		Scierror(999, "Wrong type for input argument #1: A sparse matrix of doubles is expected.\n");
+		return 1;
+	}
+	sciErr = getSparseMatrix(pvApiCtx,varAddress,&inputRows,&inputCols,&nonZeros,&itemsPerRow,&colIndex,&matrix);
+	if (sciErr.iErr)
+	{
+		printError(&sciErr, 0);
+		return 1;
+	}
+	if(inputRows!=numConstr || inputCols!=1)
+	{
+		Scierror(999, "Wrong type for input argument #1: Incorrectly sized matrix.\n");
+		return 1;
+	}
+	
+	//get argument 2: lower bound of new variable
+	sciErr = getVarAddressFromPosition(pvApiCtx, 2, &varAddress);
+	if (sciErr.iErr)
+	{
+		printError(&sciErr, 0);
+		return 1;
+	}
+	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
+	{
+		Scierror(999, "Wrong type for input argument #2: A double is expected.\n");
+		return 1;
+	}
+	iRet = getScalarDouble(pvApiCtx, varAddress, &lBound);
+	if(iRet)
+	{
+		Scierror(999, "Wrong type for input argument #2: A double is expected.\n");
+		return 1;
+	}
+	
+	//get argument 3: upper bound of new variable
+	sciErr = getVarAddressFromPosition(pvApiCtx, 3, &varAddress);
+	if (sciErr.iErr)
+	{
+		printError(&sciErr, 0);
+		return 1;
+	}
+	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
+	{
+		Scierror(999, "Wrong type for input argument #3: A double is expected.\n");
+		return 1;
+	}
+	iRet = getScalarDouble(pvApiCtx, varAddress, &uBound);
+	if(iRet)
+	{
+		Scierror(999, "Wrong type for input argument #3: A double is expected.\n");
+		return 1;
+	}
+	
+	//get argument 4: coefficient of new variable in objective
+	sciErr = getVarAddressFromPosition(pvApiCtx, 4, &varAddress);
+	if (sciErr.iErr)
+	{
+		printError(&sciErr, 0);
+		return 1;
+	}
+	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
+	{
+		Scierror(999, "Wrong type for input argument #4: A double is expected.\n");
+		return 1;
+	}
+	iRet = getScalarDouble(pvApiCtx, varAddress, &uBound);
+	if(iRet)
+	{
+		Scierror(999, "Wrong type for input argument #4: A double is expected.\n");
+		return 1;
+	}
+	
+	//get argument 5: wether the variable is constrained to be an integer
+	sciErr = getVarAddressFromPosition(pvApiCtx, 5, &varAddress);
+	if (sciErr.iErr)
+	{
+		printError(&sciErr, 0);
+		return 1;
+	}
+	if ( !isBooleanType(pvApiCtx, varAddress) )
+	{
+		Scierror(999, "Wrong type for input argument #5: A boolean is expected.\n");
+		return 1;
+	}
+	iRet = getScalarBoolean(pvApiCtx, varAddress, &isInt);
+	if(iRet)
+	{
+		Scierror(999, "Wrong type for input argument #5: A boolean is expected.\n");
+		return 1;
+	}
+	isIntChar=isInt?TRUE:FALSE;
+	
+	//get argument 6: name of new variable
+	sciErr = getVarAddressFromPosition(pvApiCtx, 6, &varAddress);
+	if (sciErr.iErr)
+	{
+		printError(&sciErr, 0);
+		return 1;
+	}
+	if ( !isStringType(pvApiCtx,varAddress) )
+	{
+		Scierror(999, "Wrong type for input argument #6: A string is expected.\n");
+		return 1;
+	}
+	iRet = getAllocatedSingleString(pvApiCtx, varAddress, &varName);
+	if(iRet)
+	{
+		Scierror(999, "Wrong type for input argument #6: A string is expected.\n");
+		return 1;
+	}
+	
+	//convert to form required by Symphony
+	rowIndex=new int[nonZeros];
+	for(rowIter=0,arrayIter=0;rowIter<numConstr;rowIter++)
+		if(itemsPerRow[rowIter])
+			rowIndex[arrayIter++]=rowIter;
+	
+	iRet=sym_add_col(global_sym_env,nonZeros,rowIndex,matrix,lBound,uBound,objCoeff,isIntChar,varName);
+	delete[] rowIndex;
+	if(iRet==FUNCTION_TERMINATED_ABNORMALLY){
+		Scierror(999, "An error occured.\n");
+		return 1;
+	}else{
+		sciprint("Variable successfully added.\n");
+	}
+	
+	//code to give output
+	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1,0);
+	if(iRet)
+	{
+		/* If error, no return variable */
+		AssignOutputVariable(pvApiCtx, 1) = 0;
+		return 1;
+	}
+	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx)+1;
+	ReturnArguments(pvApiCtx);
+	
+	return 0;
+}
+
 }

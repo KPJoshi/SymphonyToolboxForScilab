@@ -52,6 +52,7 @@ tbx_build_gateway("symphonytools", ..
 		"sym_setConstrUpper","sci_sym_setConstrBound";
 		"sym_setConstrType","sci_sym_setConstrType";
 		"sym_addConstr","sci_sym_addConstr";
+		"sym_addVar","sci_sym_addVar";
 	], ..
 	[
 		"globals.cpp",
