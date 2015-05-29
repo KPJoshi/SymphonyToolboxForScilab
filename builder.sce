@@ -51,6 +51,7 @@ tbx_build_gateway("symphonytools", ..
 		"sym_setConstrLower","sci_sym_setConstrBound";
 		"sym_setConstrUpper","sci_sym_setConstrBound";
 		"sym_setConstrType","sci_sym_setConstrType";
+		"sym_get_matrix","sci_sym_get_matrix";
 	], ..
 	[
 		"globals.cpp",
@@ -69,6 +70,6 @@ tbx_build_gateway("symphonytools", ..
 		"sci_sym_varbounds.cpp",
 		"sci_sym_rowmod.cpp",
 	], ..
-	get_absolute_file_path("builder.sce"), [], ["-lSym"], ["-fpermissive -I/usr/include/coin"], [], "g++");
+	get_absolute_file_path("builder.sce"), [], ["-lSym"], ["-w -fpermissive -I/usr/include/coin"], [], "g++");
 
 clear WITHOUT_AUTO_PUTLHSVAR;
