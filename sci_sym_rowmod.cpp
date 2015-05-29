@@ -118,8 +118,8 @@ int sci_sym_setConstrType(char *fname){
 	
 	//data declarations
 	int *varAddress,conIndex,numConstr;
-	double inputDouble,conRHS,conRange;
-	bool isLower;
+	double inputDouble,conRHS,conRHS2,conRange;
+	bool isRangedConstr=false;
 	char conType,*conTypeInput;
 	
 	//ensure that environment is active
@@ -129,7 +129,7 @@ int sci_sym_setConstrType(char *fname){
 	}
 	
 	//code to check arguments and get them
-	CheckInputArgument(pvApiCtx,4,4) ;
+	CheckInputArgument(pvApiCtx,3,4) ;
 	CheckOutputArgument(pvApiCtx,1,1) ;
 	
 	//get argument 1: index of constraint whose type is to be changed
@@ -190,10 +190,21 @@ int sci_sym_setConstrType(char *fname){
 			break;
 		case 'r':case 'R':
 			conType='R';
+			isRangedConstr=true;
 			break;
 		default:
 			Scierror(999, "Wrong type for input argument #2: Either \"L\", \"E\", \"G\", or \"R\" is expected.\n");
 			return 1;
+	}
+	//check number of arguments for specific cases
+	if(isRangedConstr){
+		if(nbInputArgument(pvApiCtx)!=4){
+			Scierror(999, "4 Arguments are expected for ranged constraint.\n");
+			return 1;
+		}
+	}else if(nbInputArgument(pvApiCtx)!=3){
+		Scierror(999, "3 Arguments are expected for non-ranged constraint.\n");
+		return 1;
 	}
 	
 	//get argument 3: constraint RHS
@@ -216,22 +227,34 @@ int sci_sym_setConstrType(char *fname){
 	}
 	
 	//get argument 4: constraint range
-	sciErr = getVarAddressFromPosition(pvApiCtx, 4, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #4: A double is expected.\n");
-		return 1;
-	}
-	iRet = getScalarDouble(pvApiCtx, varAddress, &conRange);
-	if(iRet)
-	{
-		Scierror(999, "Wrong type for input argument #4: A double is expected.\n");
-		return 1;
+	if(isRangedConstr){
+		sciErr = getVarAddressFromPosition(pvApiCtx, 4, &varAddress);
+		if (sciErr.iErr)
+		{
+			printError(&sciErr, 0);
+			return 1;
+		}
+		if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
+		{
+			Scierror(999, "Wrong type for input argument #4: A double is expected.\n");
+			return 1;
+		}
+		iRet = getScalarDouble(pvApiCtx, varAddress, &conRHS2);
+		if(iRet)
+		{
+			Scierror(999, "Wrong type for input argument #4: A double is expected.\n");
+			return 1;
+		}
+		//conRHS should be the upper bound, and conRange should be positive
+		if(conRHS>=conRHS2){
+			conRange=conRHS-conRHS2;
+		}else{
+			conRange=conRHS2-conRHS;
+			conRHS=conRHS2;
+		}
+	}else{
+		//if not ranged constraint, just set it to 0, the value probably does not matter anyway
+		conRange=0;
 	}
 	
 	iRet=sym_set_row_type(global_sym_env,conIndex,conType,conRHS,conRange);
