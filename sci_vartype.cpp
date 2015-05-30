@@ -50,16 +50,8 @@ static int commonCodePart1(){
 }
 
 static int commonCodePart2(){
-	//code to give output
-	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1, (double)retVal);
-	if(iRet)
-	{
-		/* If error, no return variable */
-		AssignOutputVariable(pvApiCtx, 1) = 0;
+	if(returnDoubleToScilab(retVal))
 		return 1;
-	}
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx)+1;
-	ReturnArguments(pvApiCtx);
 	
 	return 0;
 }

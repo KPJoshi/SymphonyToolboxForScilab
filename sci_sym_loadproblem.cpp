@@ -72,75 +72,21 @@ static int commonCodePart1(){
 //both basic and advanced loader use this code
 static int commonCodePart2(){
 	//get input 3: lower bounds of variables
-	sciErr = getVarAddressFromPosition(pvApiCtx, 3, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #3: A matrix of doubles is expected.\n");
-		cleanupBeforeExit();return 1;
-	}
-	sciErr = getMatrixOfDouble(pvApiCtx, varAddress, &inputMatrixRows, &inputMatrixCols, &lowerBounds);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if(inputMatrixRows!=1 || inputMatrixCols!=numVars)
-	{
-		Scierror(999, "Wrong type for input argument #3: Incorrectly sized matrix.\n");
-		cleanupBeforeExit();return 1;
+	if(getFixedSizeDoubleMatrixFromScilab(3,1,numVars,&lowerBounds)){
+		cleanupBeforeExit();
+		return 1;
 	}
 	
 	//get input 4: upper bounds of variables
-	sciErr = getVarAddressFromPosition(pvApiCtx, 4, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #4: A matrix of doubles is expected.\n");
-		cleanupBeforeExit();return 1;
-	}
-	sciErr = getMatrixOfDouble(pvApiCtx, varAddress, &inputMatrixRows, &inputMatrixCols, &upperBounds);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if(inputMatrixRows!=1 || inputMatrixCols!=numVars)
-	{
-		Scierror(999, "Wrong type for input argument #4: Incorrectly sized matrix.\n");
-		cleanupBeforeExit();return 1;
+	if(getFixedSizeDoubleMatrixFromScilab(4,1,numVars,&upperBounds)){
+		cleanupBeforeExit();
+		return 1;
 	}
 	
 	//get input 5: coefficients of variables in objective function to be minimized
-	sciErr = getVarAddressFromPosition(pvApiCtx, 5, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #5: A matrix of doubles is expected.\n");
-		cleanupBeforeExit();return 1;
-	}
-	sciErr = getMatrixOfDouble(pvApiCtx, varAddress, &inputMatrixRows, &inputMatrixCols, &objective);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if(inputMatrixRows!=1 || inputMatrixCols!=numVars)
-	{
-		Scierror(999, "Wrong type for input argument #5: Incorrectly sized matrix.\n");
-		cleanupBeforeExit();return 1;
+	if(getFixedSizeDoubleMatrixFromScilab(5,1,numVars,&objective)){
+		cleanupBeforeExit();
+		return 1;
 	}
 	
 	//get input 6: array that specifies wether a variable is constrained to be an integer
@@ -225,27 +171,9 @@ static int commonCodePart2(){
 	}
 	
 	//get input 9: constraint RHS
-	sciErr = getVarAddressFromPosition(pvApiCtx, 9, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #9: A matrix of doubles is expected.\n");
-		cleanupBeforeExit();return 1;
-	}
-	sciErr = getMatrixOfDouble(pvApiCtx, varAddress, &inputMatrixRows, &inputMatrixCols, &conRHS);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if(inputMatrixRows!=numConstr || inputMatrixCols!=1)
-	{
-		Scierror(999, "Wrong type for input argument #9: Incorrectly sized matrix.\n");
-		cleanupBeforeExit();return 1;
+	if(getFixedSizeDoubleMatrixFromScilab(9,numConstr,1,&conRHS)){
+		cleanupBeforeExit();
+		return 1;
 	}
 	
 	//call problem loader
@@ -254,8 +182,6 @@ static int commonCodePart2(){
 	
 	//code to give output
 	cleanupBeforeExit();
-	if(return0toScilab())
-		return 1;
 	
 	return 0;
 }
@@ -267,27 +193,9 @@ int sci_sym_loadProblemBasic(char *fname){
 		return 1;
 		
 	//get input 7: matrix of constraint equation coefficients
-	sciErr = getVarAddressFromPosition(pvApiCtx, 7, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #7: A matrix of doubles is expected.\n");
-		cleanupBeforeExit();return 1;
-	}
-	sciErr = getMatrixOfDouble(pvApiCtx, varAddress, &inputMatrixRows, &inputMatrixCols, &conVals);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if(inputMatrixRows!=numConstr || inputMatrixCols!=numVars)
-	{
-		Scierror(999, "Wrong type for input argument #7: Incorrectly sized matrix.\n");
-		cleanupBeforeExit();return 1;
+	if(getFixedSizeDoubleMatrixFromScilab(7,numConstr,numVars,&lowerBounds)){
+		cleanupBeforeExit();
+		return 1;
 	}
 
 	conMatrixColStart=new int[numVars+1]; //start of each column of constraint matrix, used internally

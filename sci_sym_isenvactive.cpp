@@ -38,7 +38,7 @@ int sci_sym_isEnvActive(char *fname){
 	}
 	
 	//code to give output
-	if(return0toScilab())
+	if(returnDoubleToScilab(returnVal))
 		return 1;
 
 	return 0;

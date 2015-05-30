@@ -4,6 +4,7 @@
  * By Keyur Joshi
  */
 #include "symphony.h"
+#include "sci_iofunc.hpp"
 
 extern sym_environment* global_sym_env; //defined in globals.cpp
 
@@ -25,15 +26,8 @@ int sci_sym_getInfinity(char *fname){
 	CheckOutputArgument(pvApiCtx,1,1) ;
 	
 	//code to give output
-	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1, sym_get_infinity());
-	if(iRet)
-	{
-		/* If error, no return variable */
-		AssignOutputVariable(pvApiCtx, 1) = 0;
+	if(returnDoubleToScilab(sym_get_infinity()))
 		return 1;
-	}
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx)+1;
-	ReturnArguments(pvApiCtx);
 	
 	return 0;
 }
