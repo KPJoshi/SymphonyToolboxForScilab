@@ -34,6 +34,34 @@ int getDoubleFromScilab(int argNum, double *dest)
 	return 0;
 }
 
+int getUIntFromScilab(int argNum, int *dest)
+{
+	SciErr sciErr;
+	int iRet,*varAddress;
+	double inputDouble;
+	const char errMsg[]="Wrong type for input argument #%d: A nonnegative integer is expected.\n";
+	const int errNum=999;
+	sciErr = getVarAddressFromPosition(pvApiCtx, argNum, &varAddress);
+	if (sciErr.iErr)
+	{
+		printError(&sciErr, 0);
+		return 1;
+	}
+	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
+	{
+		Scierror(errNum,errMsg,argNum);
+		return 1;
+	}
+	iRet = getScalarDouble(pvApiCtx, varAddress, &inputDouble);
+	if(iRet || ((double)((unsigned int)inputDouble))!=inputDouble)
+	{
+		Scierror(errNum,errMsg,argNum);
+		return 1;
+	}
+	*dest=(unsigned int)inputDouble;
+	return 0;
+}
+
 int return0toScilab()
 {
 	int iRet;
