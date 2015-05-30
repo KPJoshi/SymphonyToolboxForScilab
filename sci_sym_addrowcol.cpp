@@ -4,6 +4,7 @@
  * By Keyur Joshi
  */
 #include "symphony.h"
+#include "sci_iofunc.hpp"
 
 extern sym_environment* global_sym_env; //defined in globals.cpp
 
@@ -115,43 +116,13 @@ int sci_sym_addConstr(char *fname){
 	}
 	
 	//get argument 3: constraint RHS
-	sciErr = getVarAddressFromPosition(pvApiCtx, 3, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
+	if(getDoubleFromScilab(3,&conRHS))
 		return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #3: A double is expected.\n");
-		return 1;
-	}
-	iRet = getScalarDouble(pvApiCtx, varAddress, &conRHS);
-	if(iRet)
-	{
-		Scierror(999, "Wrong type for input argument #3: A double is expected.\n");
-		return 1;
-	}
 	
 	//get argument 4: constraint range
 	if(isRangedConstr){
-		sciErr = getVarAddressFromPosition(pvApiCtx, 4, &varAddress);
-		if (sciErr.iErr)
-		{
-			printError(&sciErr, 0);
+		if(getDoubleFromScilab(4,&conRHS2))
 			return 1;
-		}
-		if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-		{
-			Scierror(999, "Wrong type for input argument #4: A double is expected.\n");
-			return 1;
-		}
-		iRet = getScalarDouble(pvApiCtx, varAddress, &conRHS2);
-		if(iRet)
-		{
-			Scierror(999, "Wrong type for input argument #4: A double is expected.\n");
-			return 1;
-		}
 		//conRHS should be the upper bound, and conRange should be positive
 		if(conRHS>=conRHS2){
 			conRange=conRHS-conRHS2;
@@ -173,15 +144,8 @@ int sci_sym_addConstr(char *fname){
 	}
 	
 	//code to give output
-	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1,0);
-	if(iRet)
-	{
-		/* If error, no return variable */
-		AssignOutputVariable(pvApiCtx, 1) = 0;
+	if(return0toScilab())
 		return 1;
-	}
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx)+1;
-	ReturnArguments(pvApiCtx);
 	
 	return 0;
 }
@@ -239,61 +203,16 @@ int sci_sym_addVar(char *fname){
 	}
 	
 	//get argument 2: lower bound of new variable
-	sciErr = getVarAddressFromPosition(pvApiCtx, 2, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
+	if(getDoubleFromScilab(2,&lBound))
 		return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #2: A double is expected.\n");
-		return 1;
-	}
-	iRet = getScalarDouble(pvApiCtx, varAddress, &lBound);
-	if(iRet)
-	{
-		Scierror(999, "Wrong type for input argument #2: A double is expected.\n");
-		return 1;
-	}
 	
 	//get argument 3: upper bound of new variable
-	sciErr = getVarAddressFromPosition(pvApiCtx, 3, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
+	if(getDoubleFromScilab(3,&uBound))
 		return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #3: A double is expected.\n");
-		return 1;
-	}
-	iRet = getScalarDouble(pvApiCtx, varAddress, &uBound);
-	if(iRet)
-	{
-		Scierror(999, "Wrong type for input argument #3: A double is expected.\n");
-		return 1;
-	}
 	
 	//get argument 4: coefficient of new variable in objective
-	sciErr = getVarAddressFromPosition(pvApiCtx, 4, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
+	if(getDoubleFromScilab(4,&objCoeff))
 		return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #4: A double is expected.\n");
-		return 1;
-	}
-	iRet = getScalarDouble(pvApiCtx, varAddress, &uBound);
-	if(iRet)
-	{
-		Scierror(999, "Wrong type for input argument #4: A double is expected.\n");
-		return 1;
-	}
 	
 	//get argument 5: wether the variable is constrained to be an integer
 	sciErr = getVarAddressFromPosition(pvApiCtx, 5, &varAddress);
@@ -350,15 +269,8 @@ int sci_sym_addVar(char *fname){
 	}
 	
 	//code to give output
-	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1,0);
-	if(iRet)
-	{
-		/* If error, no return variable */
-		AssignOutputVariable(pvApiCtx, 1) = 0;
+	if(return0toScilab())
 		return 1;
-	}
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx)+1;
-	ReturnArguments(pvApiCtx);
 	
 	return 0;
 }

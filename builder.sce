@@ -56,6 +56,8 @@ tbx_build_gateway("symphonytools", ..
 	], ..
 	[
 		"globals.cpp",
+		"sci_iofunc.hpp",
+		"sci_iofunc.cpp",
 		"sci_sym_openclose.cpp",
 		"sci_solver_status_query_functions.cpp",
 		"sci_sym_solve.cpp",
