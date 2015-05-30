@@ -37,24 +37,8 @@ int sci_sym_setObjCoeff(char *fname){
 	CheckOutputArgument(pvApiCtx,1,1) ;
 	
 	//get argument 1: index of variable whose coefficient is to be changed
-	sciErr = getVarAddressFromPosition(pvApiCtx, 1, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
+	if(getUIntFromScilab(1,&varIndex))
 		return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #1: A positive integer stored in a double is expected.\n");
-		return 1;
-	}
-	iRet = getScalarDouble(pvApiCtx, varAddress, &inputDouble);
-	if(iRet || ((double)((unsigned int)inputDouble))!=inputDouble)
-	{
-		Scierror(999, "Wrong type for input argument #1: A positive integer stored in a double is expected.\n");
-		return 1;
-	}
-	varIndex=(unsigned int)inputDouble;
 	iRet=sym_get_num_cols(global_sym_env,&numVars);
 	if(iRet==FUNCTION_TERMINATED_ABNORMALLY){
 		Scierror(999, "An error occured. Has a problem been loaded?\n");
@@ -65,23 +49,8 @@ int sci_sym_setObjCoeff(char *fname){
 	}
 	
 	//get argument 2: new coefficient
-	sciErr = getVarAddressFromPosition(pvApiCtx, 2, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
+	if(getDoubleFromScilab(2,&newCoeff))
 		return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #2: A double is expected.\n");
-		return 1;
-	}
-	iRet = getScalarDouble(pvApiCtx, varAddress, &newCoeff);
-	if(iRet)
-	{
-		Scierror(999, "Wrong type for input argument #2: A double is expected.\n");
-		return 1;
-	}
 	
 	iRet=sym_set_obj_coeff(global_sym_env,varIndex,newCoeff);
 	if(iRet==FUNCTION_TERMINATED_ABNORMALLY){
@@ -92,15 +61,8 @@ int sci_sym_setObjCoeff(char *fname){
 	}
 	
 	//code to give output
-	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1,0);
-	if(iRet)
-	{
-		/* If error, no return variable */
-		AssignOutputVariable(pvApiCtx, 1) = 0;
+	if(return0toScilab())
 		return 1;
-	}
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx)+1;
-	ReturnArguments(pvApiCtx);
 	
 	return 0;
 }
@@ -155,15 +117,8 @@ int sci_sym_setObjSense(char *fname){
 	}
 	
 	//code to give output
-	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1,0);
-	if(iRet)
-	{
-		/* If error, no return variable */
-		AssignOutputVariable(pvApiCtx, 1) = 0;
+	if(return0toScilab())
 		return 1;
-	}
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx)+1;
-	ReturnArguments(pvApiCtx);
 	
 	return 0;
 }
