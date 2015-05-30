@@ -1,11 +1,8 @@
 /*
- * Implementation Symphony Tool Box for Scilab
- * sci_sym_openclose.cpp
+ * Symphony Tool Box for Scilab
  * contains functions that opens and closes the symphony environment 
  * By Keyur Joshi, Iswarya
- * Last edit on 22-05-2015 by Iswarya
  */
-
 #include <symphony.h>
 extern sym_environment* global_sym_env;//defined in globals.cpp
 

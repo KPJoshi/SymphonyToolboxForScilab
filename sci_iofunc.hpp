@@ -1,5 +1,5 @@
 // Symphony Toolbox for Scilab
-// Functions for input and output from Scilab
+// (Declaration of) Functions for input and output from Scilab
 // By Keyur Joshi
 
 #ifndef SCI_IOFUNCHEADER

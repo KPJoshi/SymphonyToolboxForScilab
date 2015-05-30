@@ -2,9 +2,7 @@
  * Symphony Toolbox
  * Provides the Symphony infinity value
  * By Keyur Joshi
- * Last edit 25-5-15
  */
-
 #include "symphony.h"
 
 extern sym_environment* global_sym_env; //defined in globals.cpp

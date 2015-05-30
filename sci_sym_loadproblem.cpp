@@ -2,10 +2,9 @@
  * Symphony Toolbox
  * Explicit problem loaders
  * Made by Keyur Joshi
- * Last edit on 25-5-15
  */
-
 #include "symphony.h"
+#include "sci_iofunc.hpp"
 
 extern sym_environment* global_sym_env; //defined in globals.cpp
 
@@ -22,7 +21,7 @@ static int iRet;
 
 //data declarations
 static int *varAddress=NULL,numVars,numConstr,*conMatrixColStart=NULL,*conMatrixRowIndex=NULL,*isIntVarBool=NULL,*conTypeInputLen=NULL,colIter,rowIter,inputMatrixCols,inputMatrixRows;
-static double infinity,inputDouble,*objective=NULL,*lowerBounds=NULL,*upperBounds=NULL,*conRHS=NULL,*conRange=NULL,*conVals=NULL;
+static double inputDouble,*objective=NULL,*lowerBounds=NULL,*upperBounds=NULL,*conRHS=NULL,*conRange=NULL,*conVals=NULL;
 static char *conType=NULL,*isIntVar=NULL,**conTypeInput=NULL;
 
 //delete all allocd arrays before exit, and return output argument
@@ -51,48 +50,13 @@ static int commonCodePart1(){
 	CheckInputArgument(pvApiCtx,9,9);
 	CheckOutputArgument(pvApiCtx,1,1);
 	
-	//symphony has a special infinity value of about 10^20
-	infinity=sym_get_infinity();
-	
 	//get input 1: number of variables
-	sciErr = getVarAddressFromPosition(pvApiCtx, 1, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
+	if(getUIntFromScilab(1,&numVars))
 		return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #1: A positive integer stored in a double is expected.\n");
-		return 1;
-	}
-	iRet = getScalarDouble(pvApiCtx, varAddress, &inputDouble);
-	if(iRet || ((double)((unsigned int)inputDouble))!=inputDouble)
-	{
-		Scierror(999, "Wrong type for input argument #1: A positive integer stored in a double is expected.\n");
-		return 1;
-	}
-	numVars=(unsigned int)inputDouble;
 	
 	//get input 2: number of constraints
-	sciErr = getVarAddressFromPosition(pvApiCtx, 2, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
+	if(getUIntFromScilab(2,&numConstr))
 		return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #2: A positive integer stored in a double is expected.\n");
-		return 1;
-	}
-	iRet = getScalarDouble(pvApiCtx, varAddress, &inputDouble);
-	if(iRet || ((double)((unsigned int)inputDouble))!=inputDouble)
-	{
-		Scierror(999, "Wrong type for input argument #2: A positive integer stored in a double is expected.\n");
-		return 1;
-	}
-	numConstr=(unsigned int)inputDouble;
 	
 	//allocate and prepare some arrays
 	isIntVar=new char[numVars]; //is the variable constrained to be an integer?
@@ -130,10 +94,6 @@ static int commonCodePart2(){
 		Scierror(999, "Wrong type for input argument #3: Incorrectly sized matrix.\n");
 		cleanupBeforeExit();return 1;
 	}
-	//adjust for Symphony's infinity value
-	for(colIter=0;colIter<numVars;colIter++)
-		if(lowerBounds[colIter]<(-infinity))
-			lowerBounds[colIter]=(-infinity);
 	
 	//get input 4: upper bounds of variables
 	sciErr = getVarAddressFromPosition(pvApiCtx, 4, &varAddress);
@@ -158,10 +118,6 @@ static int commonCodePart2(){
 		Scierror(999, "Wrong type for input argument #4: Incorrectly sized matrix.\n");
 		cleanupBeforeExit();return 1;
 	}
-	//adjust for Symphony's infinity value
-	for(colIter=0;colIter<numVars;colIter++)
-		if(upperBounds[colIter]>infinity)
-			upperBounds[colIter]=infinity;
 	
 	//get input 5: coefficients of variables in objective function to be minimized
 	sciErr = getVarAddressFromPosition(pvApiCtx, 5, &varAddress);
@@ -297,16 +253,9 @@ static int commonCodePart2(){
 	sciprint("Problem loaded into environment.\n");
 	
 	//code to give output
-	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1, 0.0);
-	if(iRet)
-	{
-		/* If error, no return variable */
-		AssignOutputVariable(pvApiCtx, 1) = 0;
-		cleanupBeforeExit();return 1;
-	}
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx)+1;
-	
 	cleanupBeforeExit();
+	if(return0toScilab())
+		return 1;
 	
 	return 0;
 }

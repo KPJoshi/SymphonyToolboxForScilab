@@ -1,3 +1,7 @@
+// Symphony Toolbox for Scilab
+// (Definition of) Functions for input and output from Scilab
+// By Keyur Joshi
+
 #include "api_scilab.h"
 #include "Scierror.h"
 #include "sciprint.h"
