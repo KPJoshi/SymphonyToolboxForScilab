@@ -14,14 +14,15 @@ extern "C" {
 #include "sciprint.h"
 #include "BOOL.h"
 #include <localization.h>
+#include <string.h>
 
 //error management variables
 static SciErr sciErr;
 static int iRet;
 
 //data declarations
-static int *varAddress=NULL,numVars,numConstr,*conMatrixColStart=NULL,*conMatrixRowIndex=NULL,*isIntVarBool=NULL,*conTypeInputLen=NULL,colIter,rowIter,inputMatrixCols,inputMatrixRows;
-static double inputDouble,*objective=NULL,*lowerBounds=NULL,*upperBounds=NULL,*conRHS=NULL,*conRange=NULL,*conVals=NULL;
+static int *varAddress=NULL,numVars,numConstr,*conMatrixColStart=NULL,*conMatrixRowIndex=NULL,*isIntVarBool=NULL,colIter,rowIter,inputMatrixCols,inputMatrixRows;
+static double inputDouble,objSense,*objective=NULL,*lowerBounds=NULL,*upperBounds=NULL,*conRHS=NULL,*conRHS2=NULL,*conRange=NULL,*conVals=NULL;
 static char *conType=NULL,*isIntVar=NULL,**conTypeInput=NULL;
 
 //delete all allocd arrays before exit, and return output argument
@@ -29,11 +30,16 @@ static void cleanupBeforeExit(){
 	if(conMatrixColStart) delete[] conMatrixColStart;
 	if(conMatrixRowIndex) delete[] conMatrixRowIndex;
 	if(isIntVar) delete[] isIntVar;
-	if(conTypeInputLen) delete[] conTypeInputLen;
-	for(rowIter=0;rowIter<numConstr;rowIter++)
-		delete[] conTypeInput[rowIter];
-	delete[] conTypeInput;
 	if(conType) delete[] conType;
+	if(conRange) delete[] conRange;
+	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1,0);
+	if(iRet)
+	{
+		/* If error, no return variable */
+		AssignOutputVariable(pvApiCtx, 1) = 0;
+		return;
+	}
+	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx)+1;
 	ReturnArguments(pvApiCtx);
 }
 
@@ -47,7 +53,7 @@ static int commonCodePart1(){
 	}
 	
 	//code to check arguments and get them
-	CheckInputArgument(pvApiCtx,9,9);
+	CheckInputArgument(pvApiCtx,11,11);
 	CheckOutputArgument(pvApiCtx,1,1);
 	
 	//get input 1: number of variables
@@ -60,11 +66,8 @@ static int commonCodePart1(){
 	
 	//allocate and prepare some arrays
 	isIntVar=new char[numVars]; //is the variable constrained to be an integer?
-	conTypeInputLen=new int[numConstr]; //length of string input for constraint type
-	conTypeInput=new char*[numConstr]; //string input for constraint type
 	conType=new char[numConstr]; //char representing constraint type
-	for(rowIter=0;rowIter<numConstr;rowIter++)
-		conTypeInput[rowIter]=new char[2];
+	conRange=new double[numConstr]; //range of each constraint
 
 	return 0;
 }
@@ -120,8 +123,32 @@ static int commonCodePart2(){
 			isIntVar[colIter]=FALSE;
 	}
 	
-	//get input 8: constraint type (less than/equal to/more than)
-	sciErr = getVarAddressFromPosition(pvApiCtx, 8, &varAddress);
+	//get input 7: wether to minimize or maximize objective
+	sciErr = getVarAddressFromPosition(pvApiCtx, 7, &varAddress);
+	if (sciErr.iErr)
+	{
+		printError(&sciErr, 0);
+		return 1;
+	}
+	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
+	{
+		Scierror(999, "Wrong type for input argument #7: Either 1 or -1 is expected.\n");
+		return 1;
+	}
+	iRet = getScalarDouble(pvApiCtx, varAddress, &objSense);
+	if(iRet || (objSense!=-1 && objSense!=1))
+	{
+		Scierror(999, "Wrong type for input argument #7: Either 1 or -1 is expected.\n");
+		return 1;
+	}
+	iRet=sym_set_obj_sense(global_sym_env,objSense);
+	if(iRet==FUNCTION_TERMINATED_ABNORMALLY){
+		Scierror(999, "An error occured.\n");
+		return 1;
+	}
+	
+	//get input 9: constraint type (less than/equal to/more than)
+	sciErr = getVarAddressFromPosition(pvApiCtx, 9, &varAddress);
 	if (sciErr.iErr)
 	{
 		printError(&sciErr, 0);
@@ -129,28 +156,27 @@ static int commonCodePart2(){
 	}
 	if ( !isStringType(pvApiCtx,varAddress) )
 	{
-		Scierror(999, "Wrong type for input argument #8: A matrix of strings is expected.\n");
+		Scierror(999, "Wrong type for input argument #9: A matrix of strings is expected.\n");
 		cleanupBeforeExit();return 1;
 	}
-	sciErr = getMatrixOfString(pvApiCtx, varAddress, &inputMatrixRows, &inputMatrixCols, NULL, NULL);
-	if (sciErr.iErr)
+	iRet=getAllocatedMatrixOfString(pvApiCtx, varAddress, &inputMatrixRows, &inputMatrixCols, &conTypeInput);
+	if(iRet)
 	{
-		printError(&sciErr, 0);
 		cleanupBeforeExit();return 1;
 	}
 	if(inputMatrixRows!=numConstr || inputMatrixCols!=1)
 	{
-		Scierror(999, "Wrong type for input argument #8: Incorrectly sized matrix.\n");
+		Scierror(999, "Wrong type for input argument #9: Incorrectly sized matrix.\n");
 		cleanupBeforeExit();return 1;
 	}
-	getMatrixOfString(pvApiCtx, varAddress, &inputMatrixRows, &inputMatrixCols, conTypeInputLen, NULL);
 	for(rowIter=0;rowIter<numConstr;rowIter++)
-		if(conTypeInputLen[rowIter]!=1)
+	{
+		if(strlen(conTypeInput[rowIter])!=1)
 		{
-			Scierror(999, "Wrong type for input argument #8: Each string in matrix must be of length 1\n");
+			Scierror(999, "Wrong type for input argument #9: Each string in matrix must be of length 1\n");
 			cleanupBeforeExit();return 1;
 		}
-	getMatrixOfString(pvApiCtx, varAddress, &inputMatrixRows, &inputMatrixCols, conTypeInputLen, conTypeInput);
+	}
 	for(rowIter=0;rowIter<numConstr;rowIter++)
 	{
 		switch(conTypeInput[rowIter][0])
@@ -164,17 +190,52 @@ static int commonCodePart2(){
 			case 'G':case 'g':
 				conType[rowIter]='G';
 				break;
+			case 'R':case 'r':
+				conType[rowIter]='R';
+				break;
 			default:
-				Scierror(999, "Wrong type for input argument #8: Unrecognized character. Only 'L', 'E', 'G' are allowed.\n");
+				Scierror(999, "Wrong type for input argument #9: Unrecognized character. Only 'L', 'E', 'G', 'R' are allowed.\n");
 				cleanupBeforeExit();return 1;
 		}
 	}
 	
-	//get input 9: constraint RHS
-	if(getFixedSizeDoubleMatrixFromScilab(9,numConstr,1,&conRHS)){
+	//get input 10: constraint RHS
+	if(getFixedSizeDoubleMatrixFromScilab(10,numConstr,1,&conRHS)){
 		cleanupBeforeExit();
 		return 1;
 	}
+	
+	//get input 11: constraint RHS2
+	if(getFixedSizeDoubleMatrixFromScilab(11,numConstr,1,&conRHS2)){
+		cleanupBeforeExit();
+		return 1;
+	}
+	//calculate range for ranged constraints
+	for(rowIter=0;rowIter<numConstr;rowIter++)
+	{
+		if(conType[rowIter]=='R')
+		{
+			//calculate only if ranged constraint
+			if(conRHS[rowIter]>=conRHS2[rowIter]){
+				conRange[rowIter]=conRHS[rowIter]-conRHS2[rowIter];
+			}else{
+				conRange[rowIter]=conRHS2[rowIter]-conRHS[rowIter];
+				conRHS[rowIter]=conRHS2[rowIter];
+			}
+		}else{
+			//else just set to 0
+			conRange[rowIter]=0;
+		}
+	}
+	
+	/*
+	//for debug: show all data
+	sciprint("Vars: %d Constr: %d ObjType: %lf\n",numVars,numConstr,objSense);
+	for(colIter=0;colIter<numVars;colIter++)
+		sciprint("Var %d: upper: %lf lower: %lf isInt: %d ObjCoeff: %lf\n",colIter,lowerBounds[colIter],upperBounds[colIter],isIntVar[colIter],objective[colIter]);
+	for(rowIter=0;rowIter<numConstr;rowIter++)
+		sciprint("Constr %d: type: %c RHS: %lf Range: %lf\n",rowIter,conType[rowIter],conRHS[rowIter],conRange[rowIter]);
+	*/
 	
 	//call problem loader
 	sym_explicit_load_problem(global_sym_env,numVars,numConstr,conMatrixColStart,conMatrixRowIndex,conVals,lowerBounds,upperBounds,isIntVar,objective,NULL,conType,conRHS,conRange,TRUE);
@@ -192,8 +253,8 @@ int sci_sym_loadProblemBasic(char *fname){
 	if(commonCodePart1())
 		return 1;
 		
-	//get input 7: matrix of constraint equation coefficients
-	if(getFixedSizeDoubleMatrixFromScilab(7,numConstr,numVars,&lowerBounds)){
+	//get input 8: matrix of constraint equation coefficients
+	if(getFixedSizeDoubleMatrixFromScilab(8,numConstr,numVars,&conVals)){
 		cleanupBeforeExit();
 		return 1;
 	}
@@ -222,8 +283,8 @@ int sci_sym_loadProblem(char *fname){
 	if(commonCodePart1())
 		return 1;
 		
-	//get input 7: matrix of constraint equation coefficients
-	sciErr = getVarAddressFromPosition(pvApiCtx, 7, &varAddress);
+	//get input 8: matrix of constraint equation coefficients
+	sciErr = getVarAddressFromPosition(pvApiCtx, 8, &varAddress);
 	if (sciErr.iErr)
 	{
 		printError(&sciErr, 0);
@@ -231,7 +292,7 @@ int sci_sym_loadProblem(char *fname){
 	}
 	if ( !isSparseType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
 	{
-		Scierror(999, "Wrong type for input argument #7: A sparse matrix of doubles is expected.\n");
+		Scierror(999, "Wrong type for input argument #8: A sparse matrix of doubles is expected.\n");
 		cleanupBeforeExit();return 1;
 	}
 	sciErr = getSparseMatrix(pvApiCtx,varAddress,&inputMatrixRows,&inputMatrixCols,&nonZeros,&itemsPerRow,&colIndex,&data);
@@ -242,7 +303,7 @@ int sci_sym_loadProblem(char *fname){
 	}
 	if(inputMatrixRows!=numConstr || inputMatrixCols!=numVars)
 	{
-		Scierror(999, "Wrong type for input argument #7: Incorrectly sized matrix.\n");
+		Scierror(999, "Wrong type for input argument #8: Incorrectly sized matrix.\n");
 		cleanupBeforeExit();return 1;
 	}
 	
