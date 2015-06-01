@@ -2,10 +2,9 @@
  * Symphony Toolbox
  * Provides the solution after the problem is solved
  * By Keyur Joshi
- * Last edit 25-5-15
  */
-
 #include "symphony.h"
+#include "sci_iofunc.hpp"
 
 extern sym_environment* global_sym_env; //defined in globals.cpp
 
@@ -93,15 +92,8 @@ int sci_sym_getObjVal(char *fname){
 	}
 	
 	//code to give output
-	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1, solution);
-	if(iRet)
-	{
-		/* If error, no return variable */
-		AssignOutputVariable(pvApiCtx, 1) = 0;
+	if(returnDoubleToScilab(solution))
 		return 1;
-	}
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx)+1;
-	ReturnArguments(pvApiCtx);
 	
 	return 0;
 }

@@ -2,7 +2,7 @@ mode(-1)
 lines(0)
 
 //Symphony toolbox builder
-//By Keyur Joshi, Sai Kiran, and Iswarya
+//By Keyur Joshi, Sai Kiran and Iswarya
 
 WITHOUT_AUTO_PUTLHSVAR = %t;
 
@@ -53,9 +53,15 @@ tbx_build_gateway("symphonytools", ..
 		"sym_setConstrType","sci_sym_setConstrType";
 		"sym_set_continuous","sci_sym_set_continuous";
 		"sym_set_integer","sci_sym_set_integer";
+		"sym_getMatrix","sci_sym_get_matrix";
+		"sym_getRowSense","sci_sym_get_row_sense";
+		"sym_addConstr","sci_sym_addConstr";
+		"sym_addVar","sci_sym_addVar";
 	], ..
 	[
 		"globals.cpp",
+		"sci_iofunc.hpp",
+		"sci_iofunc.cpp",
 		"sci_sym_openclose.cpp",
 		"sci_solver_status_query_functions.cpp",
 		"sci_sym_solve.cpp",
@@ -71,6 +77,7 @@ tbx_build_gateway("symphonytools", ..
 		"sci_sym_varbounds.cpp",
 		"sci_sym_rowmod.cpp",
 		"sci_sym_set_indices.cpp",
+		"sci_sym_addrowcol.cpp",
 	], ..
 	get_absolute_file_path("builder.sce"), [], ["-lSym"], ["-w -fpermissive -I/usr/include/coin"], [], "g++");
 

@@ -2,10 +2,9 @@
  * Symphony Toolbox
  * Check if Symphony environment is active
  * Made by Keyur Joshi
- * Last edit on 20-5-15
  */
-
 #include "symphony.h"
+#include "sci_iofunc.hpp"
 
 extern sym_environment* global_sym_env; //defined in globals.cpp
 
@@ -39,17 +38,9 @@ int sci_sym_isEnvActive(char *fname){
 	}
 	
 	//code to give output
-	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1, returnVal);
-    if(iRet)
-    {
-        /* If error, no return variable */
-        AssignOutputVariable(pvApiCtx, 1) = 0;
-		ReturnArguments(pvApiCtx);
-        return 1;
-    }
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx)+1;
-	
-	ReturnArguments(pvApiCtx);
+	if(returnDoubleToScilab(returnVal))
+		return 1;
+
 	return 0;
 }
 
