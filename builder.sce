@@ -2,7 +2,7 @@ mode(-1)
 lines(0)
 
 //Symphony toolbox builder
-//By Keyur Joshi, Sai Kiran, and Iswarya
+//By Keyur Joshi, Sai Kiran and Iswarya
 
 WITHOUT_AUTO_PUTLHSVAR = %t;
 
@@ -51,7 +51,8 @@ tbx_build_gateway("symphonytools", ..
 		"sym_setConstrLower","sci_sym_setConstrBound";
 		"sym_setConstrUpper","sci_sym_setConstrBound";
 		"sym_setConstrType","sci_sym_setConstrType";
-		"sym_get_matrix","sci_sym_get_matrix";
+		"sym_getMatrix","sci_sym_get_matrix";
+		"sym_getRowSense","sci_sym_get_row_sense";
 	], ..
 	[
 		"globals.cpp",
