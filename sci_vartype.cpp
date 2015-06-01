@@ -2,10 +2,9 @@
  * Symphony Toolbox
  * Provides information about variables: is it continuous/integer/boolean?
  * By Keyur Joshi
- * Last edit 25-5-15
  */
-
 #include "symphony.h"
+#include "sci_iofunc.hpp"
 
 extern sym_environment* global_sym_env; //defined in globals.cpp
 
@@ -36,24 +35,8 @@ static int commonCodePart1(){
 	CheckOutputArgument(pvApiCtx,1,1) ;
 	
 	//code to process input
-	sciErr = getVarAddressFromPosition(pvApiCtx, 1, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
+	if(getUIntFromScilab(1,&varIndex))
 		return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #1: A positive integer stored in a double is expected.\n");
-		return 1;
-	}
-	iRet = getScalarDouble(pvApiCtx, varAddress, &inputDouble);
-	if(iRet || ((double)((unsigned int)inputDouble))!=inputDouble)
-	{
-		Scierror(999, "Wrong type for input argument #1: A positive integer stored in a double is expected.\n");
-		return 1;
-	}
-	varIndex=(unsigned int)inputDouble;
 	iRet=sym_get_num_cols(global_sym_env,&numVars);
 	if(iRet==FUNCTION_TERMINATED_ABNORMALLY){
 		Scierror(999, "An error occured. Has a problem been loaded?\n");
@@ -67,16 +50,8 @@ static int commonCodePart1(){
 }
 
 static int commonCodePart2(){
-	//code to give output
-	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1, (double)retVal);
-	if(iRet)
-	{
-		/* If error, no return variable */
-		AssignOutputVariable(pvApiCtx, 1) = 0;
+	if(returnDoubleToScilab(retVal))
 		return 1;
-	}
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx)+1;
-	ReturnArguments(pvApiCtx);
 	
 	return 0;
 }

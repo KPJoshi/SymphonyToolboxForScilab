@@ -1,12 +1,11 @@
 /*
- * Implementation Symphony Tool Box for Scilab
- * sci_sym_openclose.cpp
+ * Symphony Tool Box for Scilab
  * contains functions that opens and closes the symphony environment 
  * By Keyur Joshi, Iswarya
- * Last edit on 22-05-2015 by Iswarya
  */
-
 #include <symphony.h>
+#include "sci_iofunc.hpp"
+
 extern sym_environment* global_sym_env;//defined in globals.cpp
 
 extern "C" {
@@ -43,16 +42,11 @@ int sci_sym_open(char *fname, unsigned long fname_len){
 		}
 
 	/*write satus of function (success-1 or failure-0) as output argument to scilab*/
-	int err=createScalarDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,status);//copy status to scilab
-	if (err){//error while writing status
-		AssignOutputVariable(pvApiCtx, 1) = 0;
+	if(returnDoubleToScilab(status))
 		return 1;
-		}
-	//assign status position to output argument
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx) + 1;
-	ReturnArguments(pvApiCtx);
+	
 	return 0;
-	}
+}
 
 /*Function that closes symphony environment
  * Returns 1 on success , 0 on failure
@@ -89,16 +83,11 @@ int sci_sym_close(char *fname, unsigned long fname_len){
 		
 		}
 
-	/*write satus of function (success-1 or failure-0) as output argument to scilab
-	*/
-	int err=createScalarDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,status);//copy status to scilab
-	if (err){//error while writing status
-		AssignOutputVariable(pvApiCtx, 1) = 0;
+	/*write satus of function (success-1 or failure-0) as output argument to scilab*/
+	if(returnDoubleToScilab(status))
 		return 1;
-		}
-	//assign status position to output argument
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx) + 1;
-	ReturnArguments(pvApiCtx);//return arguments to scilab
-	return 0;
-	}
+	
+	return 0;	
+}
+
 }

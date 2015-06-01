@@ -2,10 +2,9 @@
  * Symphony Toolbox
  * Explicit problem loaders
  * Made by Keyur Joshi
- * Last edit on 25-5-15
  */
-
 #include "symphony.h"
+#include "sci_iofunc.hpp"
 
 extern sym_environment* global_sym_env; //defined in globals.cpp
 
@@ -22,7 +21,7 @@ static int iRet;
 
 //data declarations
 static int *varAddress=NULL,numVars,numConstr,*conMatrixColStart=NULL,*conMatrixRowIndex=NULL,*isIntVarBool=NULL,*conTypeInputLen=NULL,colIter,rowIter,inputMatrixCols,inputMatrixRows;
-static double infinity,inputDouble,*objective=NULL,*lowerBounds=NULL,*upperBounds=NULL,*conRHS=NULL,*conRange=NULL,*conVals=NULL;
+static double inputDouble,*objective=NULL,*lowerBounds=NULL,*upperBounds=NULL,*conRHS=NULL,*conRange=NULL,*conVals=NULL;
 static char *conType=NULL,*isIntVar=NULL,**conTypeInput=NULL;
 
 //delete all allocd arrays before exit, and return output argument
@@ -51,48 +50,13 @@ static int commonCodePart1(){
 	CheckInputArgument(pvApiCtx,9,9);
 	CheckOutputArgument(pvApiCtx,1,1);
 	
-	//symphony has a special infinity value of about 10^20
-	infinity=sym_get_infinity();
-	
 	//get input 1: number of variables
-	sciErr = getVarAddressFromPosition(pvApiCtx, 1, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
+	if(getUIntFromScilab(1,&numVars))
 		return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #1: A positive integer stored in a double is expected.\n");
-		return 1;
-	}
-	iRet = getScalarDouble(pvApiCtx, varAddress, &inputDouble);
-	if(iRet || ((double)((unsigned int)inputDouble))!=inputDouble)
-	{
-		Scierror(999, "Wrong type for input argument #1: A positive integer stored in a double is expected.\n");
-		return 1;
-	}
-	numVars=(unsigned int)inputDouble;
 	
 	//get input 2: number of constraints
-	sciErr = getVarAddressFromPosition(pvApiCtx, 2, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
+	if(getUIntFromScilab(2,&numConstr))
 		return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #2: A positive integer stored in a double is expected.\n");
-		return 1;
-	}
-	iRet = getScalarDouble(pvApiCtx, varAddress, &inputDouble);
-	if(iRet || ((double)((unsigned int)inputDouble))!=inputDouble)
-	{
-		Scierror(999, "Wrong type for input argument #2: A positive integer stored in a double is expected.\n");
-		return 1;
-	}
-	numConstr=(unsigned int)inputDouble;
 	
 	//allocate and prepare some arrays
 	isIntVar=new char[numVars]; //is the variable constrained to be an integer?
@@ -108,83 +72,21 @@ static int commonCodePart1(){
 //both basic and advanced loader use this code
 static int commonCodePart2(){
 	//get input 3: lower bounds of variables
-	sciErr = getVarAddressFromPosition(pvApiCtx, 3, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
+	if(getFixedSizeDoubleMatrixFromScilab(3,1,numVars,&lowerBounds)){
+		cleanupBeforeExit();
+		return 1;
 	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #3: A matrix of doubles is expected.\n");
-		cleanupBeforeExit();return 1;
-	}
-	sciErr = getMatrixOfDouble(pvApiCtx, varAddress, &inputMatrixRows, &inputMatrixCols, &lowerBounds);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if(inputMatrixRows!=1 || inputMatrixCols!=numVars)
-	{
-		Scierror(999, "Wrong type for input argument #3: Incorrectly sized matrix.\n");
-		cleanupBeforeExit();return 1;
-	}
-	//adjust for Symphony's infinity value
-	for(colIter=0;colIter<numVars;colIter++)
-		if(lowerBounds[colIter]<(-infinity))
-			lowerBounds[colIter]=(-infinity);
 	
 	//get input 4: upper bounds of variables
-	sciErr = getVarAddressFromPosition(pvApiCtx, 4, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
+	if(getFixedSizeDoubleMatrixFromScilab(4,1,numVars,&upperBounds)){
+		cleanupBeforeExit();
+		return 1;
 	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #4: A matrix of doubles is expected.\n");
-		cleanupBeforeExit();return 1;
-	}
-	sciErr = getMatrixOfDouble(pvApiCtx, varAddress, &inputMatrixRows, &inputMatrixCols, &upperBounds);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if(inputMatrixRows!=1 || inputMatrixCols!=numVars)
-	{
-		Scierror(999, "Wrong type for input argument #4: Incorrectly sized matrix.\n");
-		cleanupBeforeExit();return 1;
-	}
-	//adjust for Symphony's infinity value
-	for(colIter=0;colIter<numVars;colIter++)
-		if(upperBounds[colIter]>infinity)
-			upperBounds[colIter]=infinity;
 	
 	//get input 5: coefficients of variables in objective function to be minimized
-	sciErr = getVarAddressFromPosition(pvApiCtx, 5, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #5: A matrix of doubles is expected.\n");
-		cleanupBeforeExit();return 1;
-	}
-	sciErr = getMatrixOfDouble(pvApiCtx, varAddress, &inputMatrixRows, &inputMatrixCols, &objective);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if(inputMatrixRows!=1 || inputMatrixCols!=numVars)
-	{
-		Scierror(999, "Wrong type for input argument #5: Incorrectly sized matrix.\n");
-		cleanupBeforeExit();return 1;
+	if(getFixedSizeDoubleMatrixFromScilab(5,1,numVars,&objective)){
+		cleanupBeforeExit();
+		return 1;
 	}
 	
 	//get input 6: array that specifies wether a variable is constrained to be an integer
@@ -269,27 +171,9 @@ static int commonCodePart2(){
 	}
 	
 	//get input 9: constraint RHS
-	sciErr = getVarAddressFromPosition(pvApiCtx, 9, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #9: A matrix of doubles is expected.\n");
-		cleanupBeforeExit();return 1;
-	}
-	sciErr = getMatrixOfDouble(pvApiCtx, varAddress, &inputMatrixRows, &inputMatrixCols, &conRHS);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if(inputMatrixRows!=numConstr || inputMatrixCols!=1)
-	{
-		Scierror(999, "Wrong type for input argument #9: Incorrectly sized matrix.\n");
-		cleanupBeforeExit();return 1;
+	if(getFixedSizeDoubleMatrixFromScilab(9,numConstr,1,&conRHS)){
+		cleanupBeforeExit();
+		return 1;
 	}
 	
 	//call problem loader
@@ -297,15 +181,6 @@ static int commonCodePart2(){
 	sciprint("Problem loaded into environment.\n");
 	
 	//code to give output
-	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1, 0.0);
-	if(iRet)
-	{
-		/* If error, no return variable */
-		AssignOutputVariable(pvApiCtx, 1) = 0;
-		cleanupBeforeExit();return 1;
-	}
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx)+1;
-	
 	cleanupBeforeExit();
 	
 	return 0;
@@ -318,27 +193,9 @@ int sci_sym_loadProblemBasic(char *fname){
 		return 1;
 		
 	//get input 7: matrix of constraint equation coefficients
-	sciErr = getVarAddressFromPosition(pvApiCtx, 7, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
-	{
-		Scierror(999, "Wrong type for input argument #7: A matrix of doubles is expected.\n");
-		cleanupBeforeExit();return 1;
-	}
-	sciErr = getMatrixOfDouble(pvApiCtx, varAddress, &inputMatrixRows, &inputMatrixCols, &conVals);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		cleanupBeforeExit();return 1;
-	}
-	if(inputMatrixRows!=numConstr || inputMatrixCols!=numVars)
-	{
-		Scierror(999, "Wrong type for input argument #7: Incorrectly sized matrix.\n");
-		cleanupBeforeExit();return 1;
+	if(getFixedSizeDoubleMatrixFromScilab(7,numConstr,numVars,&lowerBounds)){
+		cleanupBeforeExit();
+		return 1;
 	}
 
 	conMatrixColStart=new int[numVars+1]; //start of each column of constraint matrix, used internally
