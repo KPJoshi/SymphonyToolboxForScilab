@@ -56,6 +56,7 @@ tbx_build_gateway("symphonytools", ..
 		"sym_get_matrix","sci_sym_get_matrix";
 		"sym_getPrimalBound","sci_sym_getPrimalBound";
 		"sym_setPrimalBound","sci_sym_setPrimalBound";
+		"sym_setColSoln","sci_sym_setColSoln";
 	], ..
 	[
 		"globals.cpp",
@@ -77,6 +78,7 @@ tbx_build_gateway("symphonytools", ..
 		"sci_sym_rowmod.cpp",
 		"sci_sym_addrowcol.cpp",
 		"sci_sym_primalbound.cpp",
+		"sci_sym_setcolsoln.cpp",
 	], ..
 	get_absolute_file_path("builder.sce"), [], ["-lSym"], ["-w -fpermissive -I/usr/include/coin"], [], "g++");
 
