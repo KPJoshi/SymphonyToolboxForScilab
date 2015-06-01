@@ -45,6 +45,7 @@ int getUIntFromScilab(int argNum, int *dest)
 	double inputDouble;
 	const char errMsg[]="Wrong type for input argument #%d: A nonnegative integer is expected.\n";
 	const int errNum=999;
+	//same steps as above
 	sciErr = getVarAddressFromPosition(pvApiCtx, argNum, &varAddress);
 	if (sciErr.iErr)
 	{
@@ -57,6 +58,7 @@ int getUIntFromScilab(int argNum, int *dest)
 		return 1;
 	}
 	iRet = getScalarDouble(pvApiCtx, varAddress, &inputDouble);
+	//check that an unsigned int is stored in the double by casting and recasting
 	if(iRet || ((double)((unsigned int)inputDouble))!=inputDouble)
 	{
 		Scierror(errNum,errMsg,argNum);
@@ -72,6 +74,7 @@ int getFixedSizeDoubleMatrixFromScilab(int argNum, int rows, int cols, double **
 	SciErr sciErr;
 	const char errMsg[]="Wrong type for input argument #%d: A matrix of double of size %d by %d is expected.\n";
 	const int errNum=999;
+	//same steps as above
 	sciErr = getVarAddressFromPosition(pvApiCtx, argNum, &varAddress);
 	if (sciErr.iErr)
 	{
@@ -89,6 +92,7 @@ int getFixedSizeDoubleMatrixFromScilab(int argNum, int rows, int cols, double **
 		printError(&sciErr, 0);
 		return 1;
 	}
+	//check that the matrix has the correct number of rows and columns
 	if(inputMatrixRows!=rows || inputMatrixCols!=cols)
 	{
 		Scierror(errNum,errMsg,argNum,rows,cols);
@@ -101,6 +105,7 @@ int getFixedSizeDoubleMatrixFromScilab(int argNum, int rows, int cols, double **
 int return0toScilab()
 {
 	int iRet;
+	//create variable in scilab
 	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1,0);
 	if(iRet)
 	{
@@ -108,7 +113,9 @@ int return0toScilab()
 		AssignOutputVariable(pvApiCtx, 1) = 0;
 		return 1;
 	}
+	//make it the output variable
 	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx)+1;
+	//return it to scilab
 	ReturnArguments(pvApiCtx);
 	return 0;
 }
@@ -116,6 +123,7 @@ int return0toScilab()
 int returnDoubleToScilab(double retVal)
 {
 	int iRet;
+	//same steps as above
 	iRet = createScalarDouble(pvApiCtx, nbInputArgument(pvApiCtx)+1,retVal);
 	if(iRet)
 	{

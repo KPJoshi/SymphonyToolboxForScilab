@@ -4,6 +4,7 @@
  * <Author(s)>
  */
 #include "symphony.h"
+#include "sci_iofunc.hpp"
 
 extern sym_environment* global_sym_env; //defined in globals.cpp
 
