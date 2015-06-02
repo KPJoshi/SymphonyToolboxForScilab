@@ -1,11 +1,12 @@
 /*
  * Implementation Symphony Tool Box for Scilab
  * sym_data_query_functions.cpp
- * contains Data Query Functions( 11 functions)
+ * contains Data Query Functions( 14 functions)
  * Author: Sai Kiran
  */
 
 #include <symphony.h>
+#include <sci_iofunc.hpp>
 extern sym_environment* global_sym_env;//defined in globals.cpp
 
 extern "C" {
@@ -103,8 +104,8 @@ int sci_sym_get_num_int(char *fname, unsigned long fname_len){
 	}
 
 /* This is generelized function for 
- * sym_getColLower,sym_getColUpper,sym_getRhs,sym_getRowRange,sym_getRowLower
- * and sym_getRowUpper.
+ * sym_getColLower,sym_getColUpper,sym_getRhs,sym_getRowRange,sym_getRowLower,
+ * sym_getRowUpper and sym_getObjCoeff .
  * (Functions taking symphony env and pointer to array of doubles as arguments)
 */
 int sci_sym_get_dbl_arr(char *fname, unsigned long fname_len){
@@ -119,17 +120,20 @@ int sci_sym_get_dbl_arr(char *fname, unsigned long fname_len){
 	/* Array of possible callers of this function */
 	char* arr_caller[]={"sym_getColLower","sym_getColUpper",
 						"sym_getRhs","sym_getRowRange",
-						"sym_getRowLower","sym_getRowUpper"};
+						"sym_getRowLower","sym_getRowUpper",
+						"sym_getObjCoeff"};
 
 	/* Array of functions to be called */
 	int (*fun[])(sym_environment*,double*)= {sym_get_col_lower,sym_get_col_upper,
 											 sym_get_rhs,sym_get_row_range,
-											 sym_get_row_lower,sym_get_row_upper};
+											 sym_get_row_lower,sym_get_row_upper,
+											sym_get_obj_coeff };
 	
 	/* Array of functions the above functions depend on */
 	int (*fun_depends[])(sym_environment*,int*) = {sym_get_num_cols,sym_get_num_cols,
 													sym_get_num_rows,sym_get_num_rows,
-													sym_get_num_rows,sym_get_num_rows};
+													sym_get_num_rows,sym_get_num_rows,
+													sym_get_num_cols };
 
 	
 	if(global_sym_env==NULL) //There is no environment opened.
@@ -380,6 +384,72 @@ void column_major_to_row_major(int rows,int columns,int nz_ele,double *elements,
 				}
 			}
 		}
+	}
+
+/*
+ * This function is used to get sense of objective of the problem
+ * symphony function returs -1 if the objective is to be maximized
+ * or 1 if the objective is to be minimized.
+*/
+int sci_sym_get_obj_sense(char *fname, unsigned long fname_len){
+	
+	//check whether we have no input and one output argument or not
+	CheckInputArgument(pvApiCtx, 0, 0) ; //no input argument
+	CheckOutputArgument(pvApiCtx, 1, 1) ; //one output argument	
+
+	int result=0; // Termination status of caller (assume abnormal)
+
+	if(global_sym_env==NULL) //There is no environment opened.
+		sciprint("Error: Symphony environment is not initialized.\n");
+	else { //There is an environment opened
+		int sense=0;
+		// Call symphony function
+		int status=sym_get_obj_sense(global_sym_env, &sense);
+		show_termination_status(status);
+		if (status == FUNCTION_TERMINATED_NORMALLY) {
+			result=1;// Normal termination
+			switch(sense) {
+				case 1:
+					sciprint("\n Minimization \n");
+					break;
+				case -1:
+					sciprint("\n Maximization \n");
+					break;
+				default:
+					sciprint("\n Undefined return value.\n");
+				}
+			}
+		}
+	// Write termination status to scilab
+	if (!returnDoubleToScilab(result))
+		return 1;
+	return 0;
+	}
+/*
+ * This function is used to get iteration count after solving a problem
+*/
+int sci_sym_get_iteration_count(char *fname, unsigned long fname_len){
+	
+	//check whether we have no input and one output argument or not
+	CheckInputArgument(pvApiCtx, 0, 0) ; //no input argument
+	CheckOutputArgument(pvApiCtx, 1, 1) ; //one output argument
+	
+	int iteration_count=0; // return value to the caller
+	if(global_sym_env==NULL) //There is no environment opened.
+		sciprint("Error: Symphony environment is not initialized.\n");
+	else { //There is an environment opened
+		 //Call symphony function
+		int status=sym_get_iteration_count(global_sym_env,&iteration_count);
+		show_termination_status(status);
+		if (status == FUNCTION_TERMINATED_ABNORMALLY) {
+			sciprint("\nHave you solved a problem ?\n");
+			iteration_count = 0;
+			}
+		}
+	// Write the result to scilab
+	if (!returnDoubleToScilab(iteration_count))
+			return 1;
+		return 0;
 	}
 
 }

@@ -37,6 +37,7 @@ tbx_build_gateway("symphonytools", ..
 		"sym_getRowRange","sci_sym_get_dbl_arr";
 		"sym_getRowLower","sci_sym_get_dbl_arr";
 		"sym_getRowUpper","sci_sym_get_dbl_arr";
+		"sym_getObjCoeff","sci_sym_get_dbl_arr";
 		"sym_set_defaults","sci_sym_set_defaults";
 		"sym_set_int_param","sci_sym_set_int_param";
 		"sym_get_int_param","sci_sym_get_int_param";
@@ -55,6 +56,8 @@ tbx_build_gateway("symphonytools", ..
 		"sym_getRowSense","sci_sym_get_row_sense";
 		"sym_addConstr","sci_sym_addConstr";
 		"sym_addVar","sci_sym_addVar";
+		"sym_getObjSense","sci_sym_get_obj_sense";
+		"sym_getIterCount","sci_sym_get_iteration_count";
 	], ..
 	[
 		"globals.cpp",
