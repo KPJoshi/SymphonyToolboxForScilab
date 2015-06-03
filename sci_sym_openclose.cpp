@@ -17,7 +17,7 @@ extern "C" {
 
 /* Function that initializes the symphony environment
  * Returns 1 on success , 0 on failure
-*/
+ */
 int sci_sym_open(char *fname, unsigned long fname_len){
 
 	// Error management variable
@@ -31,15 +31,18 @@ int sci_sym_open(char *fname, unsigned long fname_len){
 	//check environment
 	if(global_sym_env!=NULL){
 		sciprint("Warning: Symphony environment is already initialized.\n");
-	}else {
+	}else{
 		global_sym_env = sym_open_environment();//open an environment
 		if (!global_sym_env)
 			sciprint("Error: Unable to create symphony environment.\n");
-		else {
+		else{
 			status=1;
 			sciprint("Symphony environment is created successfully. Please run 'sym_close()' to close.\n");
-			}
+			//create useful variables for user
+			createNamedScalarDouble(pvApiCtx,"sym_mimimize",1);
+			createNamedScalarDouble(pvApiCtx,"sym_maximize",-1);
 		}
+	}
 
 	/*write satus of function (success-1 or failure-0) as output argument to scilab*/
 	if(returnDoubleToScilab(status))
@@ -65,23 +68,23 @@ int sci_sym_close(char *fname, unsigned long fname_len){
 
 	if (global_sym_env==NULL){//check for environment
 		sciprint("Error: symphony environment is not initialized.\n");
-	}else {
+	}else{
 		output=sym_close_environment(global_sym_env);//close environment
 		if(output==ERROR__USER){	
 			status=0;//User error detected in user_free_master() function or when function invoked unsuccessfully
-			sciprint("Error in user_free_master()");
-			}
-		else if(output==FUNCTION_TERMINATED_ABNORMALLY){
+			sciprint("Error in user_free_master()\n");
+		}else if(output==FUNCTION_TERMINATED_ABNORMALLY){
 			status=0;//function invoked unsuccessfully
 			sciprint("Symphony environment could not be closed.\n");
-			}
-		else if(output==FUNCTION_TERMINATED_NORMALLY){			
+		}else if(output==FUNCTION_TERMINATED_NORMALLY){			
 			status=1;//function invoked successfully and no error
 			global_sym_env=NULL;//important to set to NULL, so that other functions can detect that environment is not open.
-			sciprint("Symphony environement closed successfully. Please run 'sym_open()' to restart.\n\n");
-			}
-		
+			sciprint("Symphony environement closed successfully. Please run 'sym_open()' to restart.\n");
+			//delete the sym_ variables
+			deleteNamedVariable(pvApiCtx,"sym_mimimize");
+			deleteNamedVariable(pvApiCtx,"sym_maximize");
 		}
+	}
 
 	/*write satus of function (success-1 or failure-0) as output argument to scilab*/
 	if(returnDoubleToScilab(status))

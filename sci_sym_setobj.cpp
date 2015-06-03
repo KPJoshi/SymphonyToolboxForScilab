@@ -96,13 +96,13 @@ int sci_sym_setObjSense(char *fname){
 	}
 	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
 	{
-		Scierror(999, "Wrong type for input argument #1: Either 1 or -1 is expected.\n");
+		Scierror(999, "Wrong type for input argument #1:\nEither 1 (sym_minimize) or -1 (sym_maximize) is expected.\n");
 		return 1;
 	}
 	iRet = getScalarDouble(pvApiCtx, varAddress, &objSense);
 	if(iRet || (objSense!=-1 && objSense!=1))
 	{
-		Scierror(999, "Wrong type for input argument #1: Either 1 or -1 is expected.\n");
+		Scierror(999, "Wrong type for input argument #1:\nEither 1 (sym_minimize) or -1 (sym_maximize) is expected.\n");
 		return 1;
 	}
 	iRet=sym_set_obj_sense(global_sym_env,objSense);
