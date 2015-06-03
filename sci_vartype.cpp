@@ -102,21 +102,22 @@ int sci_sym_isBinary(char *fname){
 
 int sci_sym_isInteger(char *fname){
 	
-	char retVal; //for some wierd reason this function unlike the above 2 returns a char
+	char retValc; //for some wierd reason this function unlike the above 2 returns a char
 	
 	if(commonCodePart1())
 		return 1;
 	
-	iRet=sym_is_integer(global_sym_env,varIndex,&retVal);
+	iRet=sym_is_integer(global_sym_env,varIndex,&retValc);
 	if(iRet==FUNCTION_TERMINATED_ABNORMALLY){
 		Scierror(999, "An error occured.\n");
 		return 1;
 	}else{
-		if(retVal)
+		if(retValc)
 			sciprint("This variable is constrained to be an integer.\n");
 		else
 			sciprint("This variable is not constrained to be an integer.\n");
 	}
+	retVal=retValc;
 	
 	if(commonCodePart2())
 		return 1;
