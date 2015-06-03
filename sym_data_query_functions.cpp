@@ -135,7 +135,17 @@ int sci_sym_get_dbl_arr(char *fname, unsigned long fname_len){
 													sym_get_num_rows,sym_get_num_rows,
 													sym_get_num_cols };
 
-	
+	/* We want to ouput row-matrix if we are dealing with column data .
+	 * column matrix if we are dealing with row data .
+	 * 0 - output a row matrix.
+	 * 1 - output a column matrix.
+	 */
+	int representation = 0; //output a row matrix
+
+	/* Array of representations of output depending on the above functions.
+	 * It's length is same as above arrays.
+	*/
+	int matrix_representation[] = { 0 ,0 , 1, 1, 1, 1, 0};
 	if(global_sym_env==NULL) //There is no environment opened.
 		sciprint("Error: Symphony environment is not initialized.\n");
 	else {
@@ -153,6 +163,7 @@ int sci_sym_get_dbl_arr(char *fname, unsigned long fname_len){
 				show_termination_status(ret_val);
 				if (ret_val == FUNCTION_TERMINATED_ABNORMALLY)
 					result_len=0;
+				else representation = matrix_representation[found_at];
 				}
 			else
 				sciprint("\n Is a problem loaded ? \n");
@@ -162,7 +173,11 @@ int sci_sym_get_dbl_arr(char *fname, unsigned long fname_len){
 		}
 
 	//Copy the result to scilab. Location is position next to input arguments.
-	SciErr err=createMatrixOfDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,1,result_len,result);
+	SciErr err;
+	if (representation) // output a column-matrix
+		err=createMatrixOfDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,result_len,1,result);
+	else // output a row-matrix
+		err=createMatrixOfDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,1,result_len,result);
 	free(result); //Free the allocated space
 	result=NULL; //Set to NULL
 	if (err.iErr){ //Process error
@@ -194,7 +209,7 @@ int sci_sym_get_row_sense(char *fname, unsigned long fname_len) {
 	if(global_sym_env==NULL) //There is no environment opened.
 		sciprint("Error: Symphony environment is not initialized.\n");
 	else {
-		int status=get_num_int(sym_get_num_cols,&num_rows);
+		int status=get_num_int(sym_get_num_rows,&num_rows);
 		if (status != FUNCTION_TERMINATED_ABNORMALLY) { //If function terminated normally
 			char senses[num_rows];
 			char *ptr=senses;
@@ -222,7 +237,7 @@ int sci_sym_get_row_sense(char *fname, unsigned long fname_len) {
 		else show_termination_status(status);
 		}
 	// Write output to scilab memory
-	SciErr err=createMatrixOfString(pvApiCtx,nbInputArgument(pvApiCtx)+1,1,num_rows,row_senses);
+	SciErr err=createMatrixOfString(pvApiCtx,nbInputArgument(pvApiCtx)+1,num_rows,1,row_senses);
 	free(dummy); //free dummy variable
 	dummy=NULL;
 	if (correct){ // If we have allocated
