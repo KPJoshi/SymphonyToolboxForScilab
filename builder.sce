@@ -16,12 +16,12 @@ tbx_build_gateway("symphonytools", ..
 		"sym_loadMPS","sci_sym_load_mps";
 		"sym_getStatus","sci_sym_get_status";
 		"sym_solve","sci_sym_solve";
-		"sym_isOptimal","sci_sym_is_proven_optimal";
-		"sym_isInfeasible","sci_sym_is_proven_primal_infeasible";
-		"sym_isAbandoned","sci_sym_is_abandoned";
-		"sym_isIterLimitReached","sci_sym_is_iteration_limit_reached";
-		"sym_isTimeLimitReached","sci_sym_is_time_limit_reached";
-		"sym_isTargetGapAchieved","sci_sym_is_target_gap_achieved";
+		"sym_isOptimal","sci_sym_get_solver_status";
+		"sym_isInfeasible","sci_sym_get_solver_status";
+		"sym_isAbandoned","sci_sym_get_solver_status";
+		"sym_isIterLimitReached","sci_sym_get_solver_status";
+		"sym_isTimeLimitReached","sci_sym_get_solver_status";
+		"sym_isTargetGapAchieved","sci_sym_get_solver_status";
 		"sym_isContinuous","sci_sym_isContinuous";
 		"sym_isBinary","sci_sym_isBinary";
 		"sym_isInteger","sci_sym_isInteger";

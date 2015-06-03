@@ -1,11 +1,12 @@
 /*
- * Implementation Symphony Tool Box for Scilab
+ * Implementation of Symphony Tool Box for Scilab
  * solver_status_query_functions.cpp
  * contains Solver Status Query Functions (7 functions)
- * Author: sai kiran
+ * Author: Sai Kiran
  */
 
 #include <symphony.h>
+#include <sci_iofunc.hpp>
 extern sym_environment* global_sym_env;//defined in globals.cpp
 
 extern "C" {
@@ -14,282 +15,103 @@ extern "C" {
 #include <BOOL.h>
 #include <localization.h>
 #include <sciprint.h>
+#include <string.h>
 
-extern double process_ret_val(int);
-/* Function that initializes the symphony environment
- * Returns 1 on success , 0 on failure
-*/
+int process_ret_val(int);
 
+/*
+ * This function returns the status of problem that has been solved.
+ */
 int sci_sym_get_status(char *fname, unsigned long fname_len){
-	// Error management variable
-	SciErr sciErr;
-	double status=0.0;//assuming there is an error
+
+	int status=0; // Assuming abnormal termination
   
 	//check whether we have no input and one output argument or not
 	CheckInputArgument(pvApiCtx, 0, 0) ;//no input argument
 	CheckOutputArgument(pvApiCtx, 1, 1) ;//one output argument
 
-	//check environment
+	// Check environment
 	if(global_sym_env==NULL)
 		sciprint("Error: Symphony environment is not initialized.\n");
-	else {//there is an environment opened
-		int ret_val=sym_get_status(global_sym_env);//call the symphony function
-		status=process_ret_val(ret_val);
-		}
-
-	/*write satus of function (success-1 or failure-0) as output argument to scilab
-		*/
-	int err=createScalarDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,status);//copy status to scilab
-	if (err){//error while writing status
-		AssignOutputVariable(pvApiCtx, 1) = 0;
-		return 1;
-		}
-	//assign status position to output argument
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx) + 1;
-	ReturnArguments(pvApiCtx);
-	return 0;
+	else // There is an environment opened
+		status=process_ret_val(sym_get_status(global_sym_env));// Call function
+	// Return result to scilab
+	return returnDoubleToScilab(status);
 	}
 
-int sci_sym_is_proven_optimal(char *fname, unsigned long fname_len){
-	// Error management variable
-	SciErr sciErr;
-	double status=0.0;//assuming there is an error
-  
-	//check whether we have no input and one output argument or not
-	CheckInputArgument(pvApiCtx, 0, 0) ;//no input argument
-	CheckOutputArgument(pvApiCtx, 1, 1) ;//one output argument
 
-	//check environment
+/* This is a generelized function for 
+ * sym_isOptimal,sym_isInfeasible,sym_isAbandoned,
+ * sym_isIterLimitReached,sym_isTimeLimitReached,
+ * and sym_isTargetGapAchieved.
+ * All the above functions have same return value and input argument.
+ * 
+ * It returns (to scilab) 
+ * 1 if the function is proved true.
+ * 0 if the function is proved false.
+ * -1 if there is an error.
+ */
+int sci_sym_get_solver_status(char *fname, unsigned long fname_len){
+	int result= -1 ;// Result to caller. Set to error.
+  
+	// Check whether we have no input and one output argument or not
+	CheckInputArgument(pvApiCtx, 0, 0) ;// No input argument
+
+	// One output argument (For scilab 1 o/p argument is fixed)	
+	CheckOutputArgument(pvApiCtx, 1, 1) ;
+
+	/* Array of possible callers of this function */
+	char *arr_caller[]={"sym_isOptimal","sym_isInfeasible","sym_isAbandoned",
+						"sym_isIterLimitReached","sym_isTimeLimitReached",
+						"sym_isTargetGapAchieved" };
+	
+	/* Array of functions to be called */
+	int (*fun[])(sym_environment *)= { sym_is_proven_optimal,
+										sym_is_proven_primal_infeasible,
+										sym_is_abandoned,sym_is_iteration_limit_reached,
+										sym_is_time_limit_reached,sym_is_target_gap_achieved
+											};
+	/* Output values if functions return TRUE */
+	char *output_true[] = {"The problem is solved to optimality.",
+							"The problem is proved to be infeasible.",
+							"The problem is abandoned.",
+							"Iteration limit is reached.",
+							"Time limit is reached.","Target gap is reached."};
+
+	/* Output values if functions return FALSE */
+	char *output_false[] = {"The problem is not solved to optimality.",
+							"The problem is not proved to be infeasible.",
+							"The problem is not abandoned.",
+							"Iteration limit is not reached.",
+							"Time limit is not reached.","Target gap is not reached."};
+	// Check environment
 	if(global_sym_env==NULL)
 		sciprint("Error: Symphony environment is not initialized.\n");
 	else {//there is an environment opened
-		int ret_val=sym_is_proven_optimal(global_sym_env);//call the symphony function
-		switch(ret_val){
-			case TRUE:
-				sciprint("\nThe problem was solved to optimality.\n");
-				status=1.0;
-				break;
-			case FALSE:
-				sciprint("\nThe problem was not solved to optimality.\n");
-				status=1.0;
-				break;
-			default:
-				sciprint("Error: Undefined return value.\n");
-				break;			
+		int iter = 0, length= sizeof(arr_caller) / sizeof(char *),found_at= -1;
+
+		for (;iter < length ;++iter)
+			if (!strcmp(fname,arr_caller[iter])) //Find caller
+				found_at=iter;
+		if (found_at != -1 ) {
+			result = fun[found_at](global_sym_env);
+			sciprint("\n");
+			switch (result) {
+				case TRUE: // TRUE = 1
+					sciprint(output_true[found_at]);
+					break;
+				case FALSE: // FALSE = 0
+					sciprint(output_false[found_at]);
+					break;
+				default:
+					sciprint("Undefined return value.");
+					result = -1;
+				}
+			sciprint("\n");
 			}
+		else // Very rare case
+			sciprint("\nError in function mapping in scilab script\n");
 		}
-	/*write satus of function (success-1 or failure-0) as output argument to scilab
-		*/
-	int err=createScalarDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,status);//copy status to scilab
-	if (err){//error while writing status
-		AssignOutputVariable(pvApiCtx, 1) = 0;
-		return 1;
-		}
-	//assign status position to output argument
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx) + 1;
-	ReturnArguments(pvApiCtx);
-	return 0;
-	}
-
-int sci_sym_is_proven_primal_infeasible(char *fname, unsigned long fname_len){
-	// Error management variable
-	SciErr sciErr;
-	double status=0.0;//assuming there is an error
-  
-	//check whether we have no input and one output argument or not
-	CheckInputArgument(pvApiCtx, 0, 0) ;//no input argument
-	CheckOutputArgument(pvApiCtx, 1, 1) ;//one output argument
-
-	//check environment
-	if(global_sym_env==NULL)
-		sciprint("Error: Symphony environment is not initialized.\n");
-	else {//there is an environment opened
-		int ret_val=sym_is_proven_primal_infeasible(global_sym_env);//call the symphony function
-		switch(ret_val){
-			case TRUE:
-				sciprint("\nThe problem was proven to be infeasible.\n");
-				status=1.0;
-				break;
-			case FALSE:
-				sciprint("\nThe problem was not proven to be infeasible.\n");
-				status=1.0;
-				break;
-			default:
-				sciprint("Error: Undefined return value.\n");
-				break;			
-			}
-		}
-	/*write satus of function (success-1 or failure-0) as output argument to scilab
-		*/
-	int err=createScalarDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,status);//copy status to scilab
-	if (err){//error while writing status
-		AssignOutputVariable(pvApiCtx, 1) = 0;
-		return 1;
-		}
-	//assign status position to output argument
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx) + 1;
-	ReturnArguments(pvApiCtx);
-	return 0;
-	}
-
-int sci_sym_is_abandoned(char *fname, unsigned long fname_len){
-	// Error management variable
-	SciErr sciErr;
-	double status=0.0;//assuming there is an error
-  
-	//check whether we have no input and one output argument or not
-	CheckInputArgument(pvApiCtx, 0, 0) ;//no input argument
-	CheckOutputArgument(pvApiCtx, 1, 1) ;//one output argument
-
-	//check environment
-	if(global_sym_env==NULL)
-		sciprint("Error: Symphony environment is not initialized.\n");
-	else {//there is an environment opened
-		int ret_val=sym_is_abandoned(global_sym_env);//call the symphony function
-		switch(ret_val){
-			case TRUE:
-				sciprint("\nThe problem was abandoned.\n");
-				status=1.0;
-				break;
-			case FALSE:
-				sciprint("\nThe problem was not abandoned.\n");
-				status=1.0;
-				break;
-			default:
-				sciprint("Error: Undefined return value.\n");
-				break;
-			}
-		}
-	/*write satus of function (success-1 or failure-0) as output argument to scilab
-		*/
-	int err=createScalarDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,status);//copy status to scilab
-	if (err){//error while writing status
-		AssignOutputVariable(pvApiCtx, 1) = 0;
-		return 1;
-		}
-	//assign status position to output argument
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx) + 1;
-	ReturnArguments(pvApiCtx);
-	return 0;
-	}
-
-int sci_sym_is_iteration_limit_reached(char *fname, unsigned long fname_len){
-	// Error management variable
-	SciErr sciErr;
-	double status=0.0;//assuming there is an error
-  
-	//check whether we have no input and one output argument or not
-	CheckInputArgument(pvApiCtx, 0, 0) ;//no input argument
-	CheckOutputArgument(pvApiCtx, 1, 1) ;//one output argument
-
-	//check environment
-	if(global_sym_env==NULL)
-		sciprint("Error: Symphony environment is not initialized.\n");
-	else {//there is an environment opened
-		int ret_val=sym_is_iteration_limit_reached(global_sym_env);//call the symphony function
-		switch(ret_val){
-			case TRUE:
-				sciprint("\nThe iteration limit is reached.\n");
-				status=1.0;
-				break;
-			case FALSE:
-				sciprint("\nThe iteration limit is not reached.\n");
-				status=1.0;
-				break;
-			default:
-				sciprint("Error: Undefined return value.\n");
-				break;
-			}
-		}
-	/*write satus of function (success-1 or failure-0) as output argument to scilab
-		*/
-	int err=createScalarDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,status);//copy status to scilab
-	if (err){//error while writing status
-		AssignOutputVariable(pvApiCtx, 1) = 0;
-		return 1;
-		}
-	//assign status position to output argument
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx) + 1;
-	ReturnArguments(pvApiCtx);
-	return 0;
-	}
-
-int sci_sym_is_time_limit_reached(char *fname, unsigned long fname_len){
-	double status=0.0;//assuming there is an error
-  
-	//check whether we have no input and one output argument or not
-	CheckInputArgument(pvApiCtx, 0, 0) ;//no input argument
-	CheckOutputArgument(pvApiCtx, 1, 1) ;//one output argument
-
-	//check environment
-	if(global_sym_env==NULL)
-		sciprint("Error: Symphony environment is not initialized.\n");
-	else {//there is an environment opened
-		int ret_val=sym_is_time_limit_reached(global_sym_env);//call the symphony function
-		switch(ret_val){
-			case TRUE:
-				sciprint("\nTime limit was reached.\n");
-				status=1.0;
-				break;
-			case FALSE:
-				sciprint("\nTime limit was not reached.\n");
-				status=1.0;
-				break;
-			default:
-				sciprint("Error: Undefined return value.\n");
-				break;
-			}
-		}
-	/*write satus of function (success-1 or failure-0) as output argument to scilab
-		*/
-	int err=createScalarDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,status);//copy status to scilab
-	if (err){//error while writing status
-		AssignOutputVariable(pvApiCtx, 1) = 0;
-		return 1;
-		}
-	//assign status position to output argument
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx) + 1;
-	ReturnArguments(pvApiCtx);
-	return 0;
-	}
-
-int sci_sym_is_target_gap_achieved(char *fname, unsigned long fname_len){
-	double status=0.0;//assuming there is an error
-  
-	//check whether we have no input and one output argument or not
-	CheckInputArgument(pvApiCtx, 0, 0) ;//no input argument
-	CheckOutputArgument(pvApiCtx, 1, 1) ;//one output argument
-
-	//check environment
-	if(global_sym_env==NULL)
-		sciprint("Error: Symphony environment is not initialized.\n");
-	else {//there is an environment opened
-		int ret_val=sym_is_target_gap_achieved(global_sym_env);//call the symphony function
-		switch(ret_val){
-			case TRUE:
-				sciprint("\nTarget gap was reached.\n");
-				status=1.0;
-				break;
-			case FALSE:
-				sciprint("\nTarget gap was not reached.\n");
-				status=1.0;
-				break;
-			default:
-				sciprint("Error: Undefined return value.\n");
-				break;
-			}
-		}
-	/*write satus of function (success-1 or failure-0) as output argument to scilab
-		*/
-	int err=createScalarDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,status);//copy status to scilab
-	if (err){//error while writing status
-		AssignOutputVariable(pvApiCtx, 1) = 0;
-		return 1;
-		}
-	//assign status position to output argument
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx) + 1;
-	ReturnArguments(pvApiCtx);
-	return 0;
+	return returnDoubleToScilab(result);
 	}
 }
-
