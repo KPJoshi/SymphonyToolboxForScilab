@@ -28,15 +28,15 @@ tbx_build_gateway("symphonytools", ..
 		"sym_getInfinity","sci_sym_getInfinity";
 		"sym_getVarSoln","sci_sym_getVarSoln";
 		"sym_getObjVal","sci_sym_getObjVal";
-		"sym_getNumRows","sci_sym_get_num_int";
-		"sym_getNumCols","sci_sym_get_num_int";
+		"sym_getNumConstr","sci_sym_get_num_int";
+		"sym_getNumVar","sci_sym_get_num_int";
 		"sym_getNumElements","sci_sym_get_num_int";
-		"sym_getColLower","sci_sym_get_dbl_arr";
-		"sym_getColUpper","sci_sym_get_dbl_arr";
+		"sym_getVarLower","sci_sym_get_dbl_arr";
+		"sym_getVarUpper","sci_sym_get_dbl_arr";
 		"sym_getRhs","sci_sym_get_dbl_arr";
-		"sym_getRowRange","sci_sym_get_dbl_arr";
-		"sym_getRowLower","sci_sym_get_dbl_arr";
-		"sym_getRowUpper","sci_sym_get_dbl_arr";
+		"sym_getConstrRange","sci_sym_get_dbl_arr";
+		"sym_getConstrLower","sci_sym_get_dbl_arr";
+		"sym_getConstrUpper","sci_sym_get_dbl_arr";
 		"sym_getObjCoeff","sci_sym_get_dbl_arr";
 		"sym_set_defaults","sci_sym_set_defaults";
 		"sym_set_int_param","sci_sym_set_int_param";
@@ -55,16 +55,15 @@ tbx_build_gateway("symphonytools", ..
 		"sym_set_continuous","sci_sym_set_continuous";
 		"sym_set_integer","sci_sym_set_integer";
 		"sym_getMatrix","sci_sym_get_matrix";
-		"sym_getRowSense","sci_sym_get_row_sense";
+		"sym_getConstrSense","sci_sym_get_row_sense";
 		"sym_addConstr","sci_sym_addConstr";
 		"sym_addVar","sci_sym_addVar";
-		"sym_getObjSense","sci_sym_get_obj_sense";
 		"sym_getIterCount","sci_sym_get_iteration_count";
 		"sym_get_matrix","sci_sym_get_matrix";
 		"sym_getPrimalBound","sci_sym_getPrimalBound";
 		"sym_setPrimalBound","sci_sym_setPrimalBound";
-		"sym_setColSoln","sci_sym_setColSoln";
-		"sym_getRowActivity","sci_sym_getRowActivity";
+		"sym_setVarSoln","sci_sym_setColSoln";
+		"sym_getConstrActivity","sci_sym_getRowActivity";
 		"sym_getObjSense","sci_sym_getObjSense";
 	], ..
 	[
