@@ -192,6 +192,10 @@ static int commonCodePart2()
 			conType[rowIter]='G';
 			conRange[rowIter]=0;
 			conRHS[rowIter]=conLower[rowIter];
+		}else if(conUpper[rowIter]==conLower[rowIter]){
+			conType[rowIter]='E';
+			conRange[rowIter]=0;
+			conRHS[rowIter]=conLower[rowIter];
 		}else{
 			conType[rowIter]='R';
 			conRange[rowIter]=conUpper[rowIter]-conLower[rowIter];
