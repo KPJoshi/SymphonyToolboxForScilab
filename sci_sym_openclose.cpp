@@ -39,7 +39,7 @@ int sci_sym_open(char *fname, unsigned long fname_len){
 			status=1;
 			sciprint("Symphony environment is created successfully. Please run 'sym_close()' to close.\n");
 			//create useful variables for user
-			createNamedScalarDouble(pvApiCtx,"sym_mimimize",1);
+			createNamedScalarDouble(pvApiCtx,"sym_minimize",1);
 			createNamedScalarDouble(pvApiCtx,"sym_maximize",-1);
 		}
 	}
@@ -81,7 +81,7 @@ int sci_sym_close(char *fname, unsigned long fname_len){
 			global_sym_env=NULL;//important to set to NULL, so that other functions can detect that environment is not open.
 			sciprint("Symphony environement closed successfully. Please run 'sym_open()' to restart.\n");
 			//delete the sym_ variables
-			deleteNamedVariable(pvApiCtx,"sym_mimimize");
+			deleteNamedVariable(pvApiCtx,"sym_minimize");
 			deleteNamedVariable(pvApiCtx,"sym_maximize");
 		}
 	}
