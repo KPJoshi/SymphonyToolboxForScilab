@@ -1,3 +1,6 @@
+* Source:
+* http://en.wikipedia.org/wiki/MPS_(format)
+
 NAME          TESTPROB
 ROWS
  N  COST
