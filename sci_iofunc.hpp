@@ -6,12 +6,12 @@
 #define SCI_IOFUNCHEADER
 
 //input
-extern int getDoubleFromScilab(int argNum, double *dest);
-extern int getUIntFromScilab(int argNum, int *dest);
-extern int getFixedSizeDoubleMatrixFromScilab(int argNum, int rows, int cols, double **dest);
+int getDoubleFromScilab(int argNum, double *dest);
+int getUIntFromScilab(int argNum, int *dest);
+int getFixedSizeDoubleMatrixFromScilab(int argNum, int rows, int cols, double **dest);
 
 //output
-extern int return0toScilab();
-extern int returnDoubleToScilab(double retVal);
+int return0toScilab();
+int returnDoubleToScilab(double retVal);
 
 #endif //SCI_IOFUNCHEADER
