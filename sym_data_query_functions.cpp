@@ -123,7 +123,7 @@ int sci_sym_get_dbl_arr(char *fname, unsigned long fname_len){
 				found_at=iter;
 			}
 		if (found_at != -1){
-			int status1=get_num_int(fun_depends[found_at],&result_len);
+			int status1=fun_depends[found_at](global_sym_env,&result_len);
 			if ( status1 == FUNCTION_TERMINATED_NORMALLY && result_len ) {
 				result=(double*)malloc( sizeof(double) * result_len );
 				int ret_val=fun[found_at](global_sym_env,result);
@@ -176,7 +176,7 @@ int sci_sym_get_row_sense(char *fname, unsigned long fname_len) {
 	if(global_sym_env==NULL) //There is no environment opened.
 		sciprint("Error: Symphony environment is not initialized.\n");
 	else {
-		int status=get_num_int(sym_get_num_rows,&num_rows);
+		int status=sym_get_num_rows(global_sym_env,&num_rows);
 		if (status != FUNCTION_TERMINATED_ABNORMALLY) { //If function terminated normally
 			char senses[num_rows];
 			char *ptr=senses;
@@ -267,9 +267,9 @@ int sci_sym_get_matrix(char *fname, unsigned long fname_len){
 	if(global_sym_env==NULL) //There is no environment opened.
 		sciprint("Error: Symphony environment is not initialized.\n");
 	else { //There is an environment opened
-		int status1=get_num_int(sym_get_num_elements,&nz_ele); //No. of non-zero elements
-		int status2=get_num_int(sym_get_num_cols , &columns); //Columns
-		int status3=get_num_int(sym_get_num_rows , &rows); //Rows
+		int status1=sym_get_num_elements(global_sym_env,&nz_ele); //No. of non-zero elements
+		int status2=sym_get_num_cols(global_sym_env , &columns); //Columns
+		int status3=sym_get_num_rows(global_sym_env , &rows); //Rows
 		int status4=FUNCTION_TERMINATED_ABNORMALLY;
 		
 		//Make sure functions terminated normally
