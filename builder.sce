@@ -8,65 +8,85 @@ WITHOUT_AUTO_PUTLHSVAR = %t;
 
 tbx_build_gateway("symphonytools", ..
 	[
+		//for opening/closing environment and checking if it is open/close
 		"sym_open","sci_sym_open";
 		"sym_close","sci_sym_close";
+		"sym_isEnvActive","sci_sym_isEnvActive";
+		
+		//run time parameters
+		"sym_resetParams","sci_sym_set_defaults";
+		"sym_setIntParam","sci_sym_set_int_param";
+		"sym_getIntParam","sci_sym_get_int_param";
+		"sym_setDblParam","sci_sym_set_dbl_param";
+		"sym_getDblParam","sci_sym_get_dbl_param";
+		"sym_setStrParam","sci_sym_set_str_param";
+		"sym_getStrParam","sci_sym_get_str_param";
+		"sym_getInfinity","sci_sym_getInfinity";
+		
+		//problem loaders
 		"sym_loadProblemBasic","sci_sym_loadProblemBasic";
 		"sym_loadProblem","sci_sym_loadProblem";
-		"sym_isEnvActive","sci_sym_isEnvActive";
 		"sym_loadMPS","sci_sym_load_mps";
-		"sym_getStatus","sci_sym_get_status";
+		
+		//basic data
+		"sym_getNumConstr","sci_sym_get_num_int";
+		"sym_getNumVar","sci_sym_get_num_int";
+		"sym_getNumElements","sci_sym_get_num_int";
+		
+		//variable and objective data
+		"sym_isContinuous","sci_sym_isContinuous";
+		"sym_isBinary","sci_sym_isBinary";
+		"sym_isInteger","sci_sym_isInteger";
+		"sym_setContinuous","sci_sym_set_continuous";
+		"sym_setInteger","sci_sym_set_integer";
+		"sym_getVarLower","sci_sym_get_dbl_arr";
+		"sym_getVarUpper","sci_sym_get_dbl_arr";
+		"sym_setVarLower","sci_sym_setVarBound";
+		"sym_setVarUpper","sci_sym_setVarBound";
+		"sym_getObjCoeff","sci_sym_get_dbl_arr";
+		"sym_setObjCoeff","sci_sym_setObjCoeff";
+		"sym_getObjSense","sci_sym_getObjSense";
+		"sym_setObjSense","sci_sym_setObjSense";
+		
+		//constraint data
+		"sym_getRhs","sci_sym_get_dbl_arr";
+		"sym_getConstrRange","sci_sym_get_dbl_arr";
+		"sym_getConstrLower","sci_sym_get_dbl_arr";
+		"sym_getConstrUpper","sci_sym_get_dbl_arr";
+		"sym_setConstrLower","sci_sym_setConstrBound";
+		"sym_setConstrUpper","sci_sym_setConstrBound";
+		"sym_setConstrType","sci_sym_setConstrType";
+		"sym_getMatrix","sci_sym_get_matrix";
+		"sym_getConstrSense","sci_sym_get_row_sense";
+		
+		//add/remove variables and constraints
+		"sym_addConstr","sci_sym_addConstr";
+		"sym_addVar","sci_sym_addVar";
+		"sym_deleteVars","sci_sym_delete_cols";
+		"sym_deleteConstrs","sci_sym_delete_rows";
+		
+		//primal bound
+		"sym_getPrimalBound","sci_sym_getPrimalBound";
+		"sym_setPrimalBound","sci_sym_setPrimalBound";
+		
+		//set preliminary solution
+		"sym_setVarSoln","sci_sym_setColSoln";
+		
+		//solve
 		"sym_solve","sci_sym_solve";
+		
+		//post solve functions
+		"sym_getStatus","sci_sym_get_status";
 		"sym_isOptimal","sci_sym_get_solver_status";
 		"sym_isInfeasible","sci_sym_get_solver_status";
 		"sym_isAbandoned","sci_sym_get_solver_status";
 		"sym_isIterLimitReached","sci_sym_get_solver_status";
 		"sym_isTimeLimitReached","sci_sym_get_solver_status";
 		"sym_isTargetGapAchieved","sci_sym_get_solver_status";
-		"sym_isContinuous","sci_sym_isContinuous";
-		"sym_isBinary","sci_sym_isBinary";
-		"sym_isInteger","sci_sym_isInteger";
-		"sym_getInfinity","sci_sym_getInfinity";
 		"sym_getVarSoln","sci_sym_getVarSoln";
 		"sym_getObjVal","sci_sym_getObjVal";
-		"sym_getNumConstr","sci_sym_get_num_int";
-		"sym_getNumVar","sci_sym_get_num_int";
-		"sym_getNumElements","sci_sym_get_num_int";
-		"sym_getVarLower","sci_sym_get_dbl_arr";
-		"sym_getVarUpper","sci_sym_get_dbl_arr";
-		"sym_getRhs","sci_sym_get_dbl_arr";
-		"sym_getConstrRange","sci_sym_get_dbl_arr";
-		"sym_getConstrLower","sci_sym_get_dbl_arr";
-		"sym_getConstrUpper","sci_sym_get_dbl_arr";
-		"sym_getObjCoeff","sci_sym_get_dbl_arr";
-		"sym_set_defaults","sci_sym_set_defaults";
-		"sym_set_int_param","sci_sym_set_int_param";
-		"sym_get_int_param","sci_sym_get_int_param";
-		"sym_set_dbl_param","sci_sym_set_dbl_param";
-		"sym_get_dbl_param","sci_sym_get_dbl_param";
-		"sym_set_str_param","sci_sym_set_str_param";
-		"sym_get_str_param","sci_sym_get_str_param";
-		"sym_setObjCoeff","sci_sym_setObjCoeff";
-		"sym_setObjSense","sci_sym_setObjSense";
-		"sym_setVarLower","sci_sym_setVarBound";
-		"sym_setVarUpper","sci_sym_setVarBound";
-		"sym_setConstrLower","sci_sym_setConstrBound";
-		"sym_setConstrUpper","sci_sym_setConstrBound";
-		"sym_setConstrType","sci_sym_setConstrType";
-		"sym_set_continuous","sci_sym_set_continuous";
-		"sym_set_integer","sci_sym_set_integer";
-		"sym_getMatrix","sci_sym_get_matrix";
-		"sym_getConstrSense","sci_sym_get_row_sense";
-		"sym_addConstr","sci_sym_addConstr";
-		"sym_addVar","sci_sym_addVar";
 		"sym_getIterCount","sci_sym_get_iteration_count";
-		"sym_get_matrix","sci_sym_get_matrix";
-		"sym_getPrimalBound","sci_sym_getPrimalBound";
-		"sym_setPrimalBound","sci_sym_setPrimalBound";
-		"sym_setVarSoln","sci_sym_setColSoln";
 		"sym_getConstrActivity","sci_sym_getRowActivity";
-		"sym_getObjSense","sci_sym_getObjSense";
-		"sym_delete_cols","sci_sym_delete_cols";
-		"sym_delete_rows","sci_sym_delete_rows";
 	], ..
 	[
 		"globals.cpp",
