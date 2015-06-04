@@ -65,6 +65,8 @@ tbx_build_gateway("symphonytools", ..
 		"sym_setVarSoln","sci_sym_setColSoln";
 		"sym_getConstrActivity","sci_sym_getRowActivity";
 		"sym_getObjSense","sci_sym_getObjSense";
+		"sym_delete_cols","sci_sym_delete_cols";
+		"sym_delete_rows","sci_sym_delete_rows";
 	], ..
 	[
 		"globals.cpp",
@@ -90,6 +92,7 @@ tbx_build_gateway("symphonytools", ..
 		"sci_sym_setcolsoln.cpp",
 		"sci_sym_getrowact.cpp",
 		"sci_sym_getobjsense.cpp",
+		"sci_sym_remove.cpp",
 	], ..
 	get_absolute_file_path("builder.sce"), [], ["-lSym"], ["-w -fpermissive -I/usr/include/coin"], [], "g++");
 
