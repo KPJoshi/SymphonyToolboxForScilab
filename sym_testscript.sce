@@ -40,10 +40,15 @@ function performLotsOfTests(numVar)
 	sym_getIterCount
 	sym_isTimeLimitReached
 	sym_isTargetGapAchieved
-	sym_getVarSoln
-	sym_getObjVal
 	sym_getPrimalBound
-	sym_getConstrActivity
+	//these can fail if problem is infeasible
+	try
+		sym_getVarSoln
+		sym_getObjVal
+		sym_getConstrActivity
+	catch
+		mprintf("Some tests were skipped, most likely because the problem is infeasible.\n")
+	end
 endfunction
 
 //open environment
@@ -79,6 +84,21 @@ performLotsOfTests(2)
 sym_loadProblem(2,1,[0.1,0.1],[0.9,0.9],[1,1],[%f,%t],sym_maximize,sparse([1,1]),[-%inf],[1])
 
 performLotsOfTests(2)
+
+//test 1 problem 4 : from https://people.richland.edu/james/ictcm/2006/3dsimplex.html
+sym_loadProblemBasic(3,4,[0,0,0],[%inf,%inf,%inf],[20,10,15],[%f,%f,%f],sym_maximize,[3,2,5;2,1,1;1,1,3;5,2,4],[-%inf;-%inf;-%inf;-%inf],[55;26;30;57])
+
+performLotsOfTests(3)
+
+//test 1 problem 5 : same as problem 4, but constrainted to be integer
+sym_loadProblemBasic(3,4,[0,0,0],[%inf,%inf,%inf],[20,10,15],[%t,%t,%t],sym_maximize,[3,2,5;2,1,1;1,1,3;5,2,4],[-%inf;-%inf;-%inf;-%inf],[55;26;30;57])
+
+performLotsOfTests(3)
+
+//test 1 problem 6 : from http://in.mathworks.com/help/optim/ug/mixed-integer-linear-programming-basics.html
+sym_loadProblemBasic(8,3,[0,0,0,0,0,0,0,0],[1,1,1,1,%inf,%inf,%inf,%inf],[350*5,330*3,310*4,280*6,500,450,400,100],[%t,%t,%t,%t,%f,%f,%f,%f],sym_minimize,[5,3,4,6,1,1,1,1;5*0.05,3*0.04,4*0.05,6*0.03,0.08,0.07,0.06,0.03;5*0.03,3*0.03,4*0.04,6*0.04,0.06,0.07,0.08,0.09],[25;1.25;1.25],[25;1.25;1.25])
+
+performLotsOfTests(8)
 
 //------------
 //finalization
