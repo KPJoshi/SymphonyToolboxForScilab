@@ -20,34 +20,10 @@ extern "C" {
 
 // Function to print termination status of a function
 void show_termination_status(int status) {
-	if (status == FUNCTION_TERMINATED_NORMALLY)
-		sciprint("\nFunction invoked successfully.\n");
-	else
-		sciprint("\nFunction invoked unsuccessfully.\n");	
-	}
-
-/* This function takes a function pointer as argument that can be
- * sym_get_num_cols or
- * sym_get_num_ros or
- * sym_get_num_elements
- * and return the result of the function
-*/
-static int get_num_int(int (*fun)(sym_environment*,int*) , int* result){
-	return fun(global_sym_env,result);//call the function
-	}
-
-/* This function takes a function pointer and pointer to array of doubles as arguments
- * The functions are
- *  sym_get_col_lower
- *  sym_get_col_upper
- *  sym_get_rhs
- *  sym_get_row_range
- *  sym_get_row_lower
- *  sym_get_row_upper
- * and write the ouput of the function to pointer to array of double values.
-*/
-static int get_arr_dbl( int (*fun)(sym_environment* ,double* ),double* arr){
-	return fun(global_sym_env,arr);
+	if (status == FUNCTION_TERMINATED_ABNORMALLY)
+		sciprint("\nFunction invoked unsuccessfully.\n");
+	//else
+		//sciprint("\nFunction invoked successfully.\n");	
 	}
 
 /*
@@ -81,7 +57,7 @@ int sci_sym_get_num_int(char *fname, unsigned long fname_len){
 				found_at=iter;
 			}
 		if (found_at != -1) {
-			int ret_val=get_num_int(fun[found_at],&result);
+			int ret_val=fun[found_at](global_sym_env,&result);
 			show_termination_status(ret_val);
 			if (ret_val == FUNCTION_TERMINATED_ABNORMALLY)
 				result=0;
@@ -91,16 +67,7 @@ int sci_sym_get_num_int(char *fname, unsigned long fname_len){
 		}
 	
 	//Copy the result to scilab. Location is position next to input arguments.
-	int err=createScalarDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,result);
-	if (err){//error while writing result to scilab
-		AssignOutputVariable(pvApiCtx, 1) = 0;
-		return 1;
-		}
-
-	//assign result position to output argument
-	AssignOutputVariable(pvApiCtx, 1) = nbInputArgument(pvApiCtx) + 1;
-	ReturnArguments(pvApiCtx);
-	return 0;
+	return returnDoubleToScilab(result);
 	}
 
 /* This is generelized function for 
@@ -159,7 +126,7 @@ int sci_sym_get_dbl_arr(char *fname, unsigned long fname_len){
 			int status1=get_num_int(fun_depends[found_at],&result_len);
 			if ( status1 == FUNCTION_TERMINATED_NORMALLY && result_len ) {
 				result=(double*)malloc( sizeof(double) * result_len );
-				int ret_val=get_arr_dbl(fun[found_at],result);
+				int ret_val=fun[found_at](global_sym_env,result);
 				show_termination_status(ret_val);
 				if (ret_val == FUNCTION_TERMINATED_ABNORMALLY)
 					result_len=0;
@@ -424,9 +391,7 @@ int sci_sym_get_iteration_count(char *fname, unsigned long fname_len){
 			}
 		}
 	// Write the result to scilab
-	if (!returnDoubleToScilab(iteration_count))
-			return 1;
-		return 0;
+	return returnDoubleToScilab(iteration_count);
 	}
 
 }
