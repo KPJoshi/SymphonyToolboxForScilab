@@ -1,6 +1,3 @@
-* Source:
-* http://en.wikipedia.org/wiki/MPS_(format)
-
 NAME          TESTPROB
 ROWS
  N  COST
@@ -22,3 +19,6 @@ BOUNDS
  LO BND1      YTWO                -1
  UP BND1      YTWO                 1
 ENDATA
+
+Source:
+http://en.wikipedia.org/wiki/MPS_(format)
