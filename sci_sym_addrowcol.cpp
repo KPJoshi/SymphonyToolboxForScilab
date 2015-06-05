@@ -22,7 +22,7 @@ int sci_sym_addConstr(char *fname){
 	int iRet;
 	
 	//data declarations
-	int *varAddress,numVars,nonZeros,*itemsPerRow,*colIndex,inputRows,inputCols;
+	int *varAddress,numVars,nonZeros,*itemsPerRow,*colIndex,inputRows,inputCols,colIter;
 	double inputDouble,*matrix,conRHS,conRHS2,conRange;
 	char conType,*conTypeInput;
 	bool isRangedConstr=false;
@@ -67,6 +67,9 @@ int sci_sym_addConstr(char *fname){
 		Scierror(999, "Wrong type for input argument #1: Incorrectly sized matrix.\n");
 		return 1;
 	}
+	//scilab has 1-based column indices, convert to 0-based for Symphony
+	for(colIter=0;colIter<nonZeros;colIter++)
+		colIndex[colIter]--;
 	
 	//get argument 2: type of constraint
 	sciErr = getVarAddressFromPosition(pvApiCtx, 2, &varAddress);
