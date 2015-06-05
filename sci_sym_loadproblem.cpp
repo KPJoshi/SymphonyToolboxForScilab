@@ -45,6 +45,13 @@ static void cleanupBeforeExit()
 	ReturnArguments(pvApiCtx);
 }
 
+static int checkNumArgs()
+{
+	CheckInputArgument(pvApiCtx,10,10);
+	CheckOutputArgument(pvApiCtx,1,1);
+	return 1;
+}
+
 //both basic and advanced loader use this code
 static int commonCodePart1()
 {
@@ -57,8 +64,8 @@ static int commonCodePart1()
 	}
 	
 	//code to check arguments and get them
-	CheckInputArgument(pvApiCtx,10,10);
-	CheckOutputArgument(pvApiCtx,1,1);
+	if(checkNumArgs()==0)
+		return 1;
 	
 	//get input 1: number of variables
 	if(getUIntFromScilab(1,&numVars))

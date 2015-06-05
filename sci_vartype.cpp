@@ -23,6 +23,13 @@ static int iRet;
 static int *varAddress,varIndex,numVars,retVal;
 static double inputDouble;
 
+static int checkNumArgs()
+{
+	CheckInputArgument(pvApiCtx,1,1);
+	CheckOutputArgument(pvApiCtx,1,1);
+	return 1;
+}
+
 static int commonCodePart1(){
 	//ensure that environment is active
 	if(global_sym_env==NULL){
@@ -31,8 +38,8 @@ static int commonCodePart1(){
 	}
 	
 	//code to check arguments and get them
-	CheckInputArgument(pvApiCtx,1,1) ;
-	CheckOutputArgument(pvApiCtx,1,1) ;
+	if(checkNumArgs()==0)
+		return 1;
 	
 	//code to process input
 	if(getUIntFromScilab(1,&varIndex))
