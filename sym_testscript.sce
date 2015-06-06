@@ -24,7 +24,7 @@ function performLotsOfTests(numVar)
 		sym_isInteger(iter)
 	end
 	sym_getNumElements
-	sym_get_matrix
+	sym_getMatrix
 	sym_getConstrLower
 	sym_getConstrUpper
 	sym_getConstrRange
@@ -50,6 +50,8 @@ function performLotsOfTests(numVar)
 		mprintf("Some tests were skipped, most likely because the problem is infeasible.\n")
 	end
 endfunction
+
+clc
 
 //open environment
 sym_open
@@ -99,6 +101,98 @@ performLotsOfTests(3)
 sym_loadProblemBasic(8,3,[0,0,0,0,0,0,0,0],[1,1,1,1,%inf,%inf,%inf,%inf],[350*5,330*3,310*4,280*6,500,450,400,100],[%t,%t,%t,%t,%f,%f,%f,%f],sym_minimize,[5,3,4,6,1,1,1,1;5*0.05,3*0.04,4*0.05,6*0.03,0.08,0.07,0.06,0.03;5*0.03,3*0.03,4*0.04,6*0.04,0.06,0.07,0.08,0.09],[25;1.25;1.25],[25;1.25;1.25])
 
 performLotsOfTests(8)
+
+input("Test 1 complete. Press enter to clear console and perform next test.")
+
+clc
+
+//-------------------------
+//test 2: problem modifiers
+//-------------------------
+
+//load a basic problem
+sym_loadProblem(2,2,[0,0],[%inf,%inf],[1,1],[%t,%t],sym_maximize,sparse([1,2;2,1]),[-%inf;-%inf],[7;6.5])
+
+sym_setObjSense(sym_minimize)
+sym_getObjSense
+
+sym_setContinuous(1)
+sym_isContinuous(1)
+sym_setInteger(1)
+sym_isInteger(1)
+
+sym_setObjCoeff(1,2)
+sym_getObjCoeff
+sym_setVarLower(1,-1)
+sym_getVarLower
+sym_setVarUpper(0,100)
+sym_getVarUpper
+
+sym_setConstrLower(0,-100)
+sym_getConstrLower
+sym_getConstrRange
+sym_getConstrSense
+sym_setConstrUpper(0,7.1)
+sym_getConstrUpper
+sym_getConstrRange
+sym_getConstrSense
+sym_setConstrType(1,"R",-1,6.6)
+sym_getConstrLower
+sym_getConstrUpper
+sym_getConstrRange
+sym_getConstrSense
+
+sym_getNumVar
+sym_getNumConstr
+
+sym_addConstr(sparse([2,3]),"G",5)
+sym_addConstr(sparse([1.5,2.3]),"E",7)
+sym_getConstrLower
+sym_getConstrUpper
+sym_getConstrRange
+sym_getConstrSense
+sym_deleteConstrs([2,3])
+sym_getNumVar
+sym_getNumConstr
+
+sym_addVar(sparse([1;1]),-%inf,%inf,1,%f,"test1")
+sym_addVar(sparse([1.5;0.5]),100,200,-0.2,%t,"test2")
+sym_getVarLower
+sym_getVarUpper
+sym_getObjCoeff
+sym_isContinuous(2)
+sym_isBinary(2)
+sym_isInteger(2)
+sym_isContinuous(3)
+sym_isBinary(3)
+sym_isInteger(3)
+sym_getMatrix
+sym_deleteVars([2,3])
+sym_getNumVar
+sym_getNumConstr
+
+input("Test 2 complete. Press enter to clear console and perform next test.")
+
+clc
+
+//--------------------------
+//test 3: runtime parameters
+//--------------------------
+
+//load a basic problem
+sym_loadProblem(2,2,[0,0],[%inf,%inf],[1,1],[%t,%t],sym_maximize,sparse([1,2;2,1]),[-%inf;-%inf],[7;6.5])
+
+sym_setDblParam("time_limit",10)
+sym_getDblParam("time_limit")
+sym_setStrParam("probname","testprob")
+sym_getStrParam("probname")
+sym_setIntParam("verbosity",1)
+sym_getIntParam("verbosity")
+sym_setIntParam("xyz",11)
+sym_resetParams
+sym_getDblParam("time_limit")
+sym_getStrParam("probname")
+sym_getIntParam("verbosity")
 
 //------------
 //finalization

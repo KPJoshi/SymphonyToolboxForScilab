@@ -8,7 +8,9 @@
 //input
 int getDoubleFromScilab(int argNum, double *dest);
 int getUIntFromScilab(int argNum, int *dest);
+int getIntFromScilab(int argNum, int *dest);
 int getFixedSizeDoubleMatrixFromScilab(int argNum, int rows, int cols, double **dest);
+int getDoubleMatrixFromScilab(int argNum, int *rows, int *cols, double **dest);
 
 //output
 int return0toScilab();
