@@ -15,87 +15,87 @@ int process_ret_val(int ret_val){
 	sciprint("\n");
 	switch(ret_val){
 		case TM_NO_PROBLEM:
-			sciprint("TM_NO_PROBLEM");
+			sciprint("No problem has been loaded.");
 			break;
 		case TM_NO_SOLUTION:
-			sciprint("TM_NO_SOLUTION");
+			sciprint("This problem is infeasible.");
 			break;
 		case TM_FINISHED:
-			sciprint("TM_FINISHED");
+			sciprint("The solver has finished working.");
 			break;
 		case TM_UNFINISHED:
-			sciprint("TM_UNFINISHED");
+			sciprint("The solver has NOT finished working.");
 			break;
 		case TM_FEASIBLE_SOLUTION_FOUND:
-			sciprint("TM_FEASIBLE_SOLUTION_FOUND");
+			sciprint("A feasible solution has been found. It may not be optimal.");
 			break;
 		case TM_SIGNAL_CAUGHT:
 			sciprint("TM_SIGNAL_CAUGHT");
 			break;
 		case TM_UNBOUNDED:
-			sciprint("TM_UNBOUNDED");
+			sciprint("This problem or its solution is unbounded.");
 			break;
 		case PREP_OPTIMAL_SOLUTION_FOUND:
-			sciprint("PREP_OPTIMAL_SOLUTION_FOUND");
+			sciprint("An optimal solution has been found.");
 			break;
 		case PREP_NO_SOLUTION:
-			sciprint("PREP_NO_SOLUTION");
+			sciprint("This problem is infeasible.");
 			break;
 		case PREP_ERROR:
-			sciprint("PREP_ERROR");
+			sciprint("An error occured during preprocessing.");
 			status=1;
 			break;
 		case ERROR__USER:
-			sciprint("Error. User error detected in one of"
-			"sci_user_send_lp_data(),"
-			"sci_user_send_cg_data(),"
-			"user_send_cp_data(),"
-			"user_receive_feasible_solution(),"
-			"user_display_solution(),"
+			sciprint("Error: user error detected in one of "
+			"sci_user_send_lp_data(), "
+			"sci_user_send_cg_data(), "
+			"user_send_cp_data(), "
+			"user_receive_feasible_solution(), "
+			"user_display_solution(), "
 			"user_process_own_messages() functions.");
 			status=1;
 			break;
 		case TM_OPTIMAL_SOLUTION_FOUND:
-			sciprint("Tree Manager (TM) found the optimal solution and stopped.");
-			status=0;
+			sciprint("An optimal solution has been found.");
 			break;
 		case TM_TIME_LIMIT_EXCEEDED:
-			sciprint("TM stopped after reaching the predefined time limit.");
-			status=0;
+			sciprint("The solver stopped after the time limit was reached.");
 			break;
 		case TM_NODE_LIMIT_EXCEEDED:
-			sciprint("TM stopped after reaching the predefined node limit.");
+			sciprint("The solver stopped after the node limit was reached.");
 			break;
 		case TM_TARGET_GAP_ACHIEVED:
-			sciprint("TM stopped after achieving the predefined target gap.");
+			sciprint("The solver stopped after achieving the target gap.");
 			break;
 		case TM_FOUND_FIRST_FEASIBLE:
-			sciprint("TM stopped after finding the first feasible solution.");
+			sciprint("A feasible solution has been found. It may not be optimal.");
 			break;
 		case TM_ERROR__NO_BRANCHING_CANDIDATE:
-			sciprint("Error. TM stopped. User didn’t select branching candidate in user select candidates() callback");
-			status=1;			
+			sciprint("Error: user didn’t select branching candidate in user_select_candidates()");
+			status=1;
 			break;
 		case TM_ERROR__ILLEGAL_RETURN_CODE:
-			sciprint("Error. TM stopped after getting an invalid return code.");
-			status=1;			
+			sciprint("Error: illegal return code.");
+			status=1;
 			break;
 		case TM_ERROR__NUMERICAL_INSTABILITY:
-			sciprint("Error. TM stopped due to some numerical difficulties.");
-			status=1;			
+			sciprint("Error: solver stopped due to some numerical difficulties.");
+			status=1;
 			break;
 		case TM_ERROR__COMM_ERROR:
-			sciprint("Error. TM stopped due to communication error.");
-			status=1;			
+			sciprint("Error: solver stopped due to communication error.");
+			status=1;
 			break;
 		case TM_ERROR__USER:
-			sciprint("Error. TM stopped. User error detected in one of user callbacks called during TM processes.");
-		default:
-			sciprint("Error. Undefined return value .");
-			status=1;			
+			sciprint("Error: user error detected in one of user callbacks called during TM processes.");
 			break;
-		}
+		default:
+			sciprint("Error: undefined return value.");
+			status=1;
+			break;
+	}
 	sciprint("\n");
 	return status;
-	}
+}
+
 }
