@@ -9,6 +9,10 @@ libsymphonytools.c
 # gedit temporary files
 *~
 
+# Generated help files
+help/master_help.xml
+help/scilab_help_help/*
+
 # Other
 *.pdf
 *.gz
