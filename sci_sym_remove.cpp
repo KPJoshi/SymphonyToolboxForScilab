@@ -73,10 +73,27 @@ int sci_sym_delete_cols(char *fname, unsigned long fname_len){
 		sciprint("Error: Symphony environment not initialized. Please run 'sym_open()' first.\n");
 		}
 	else {
+		int flag=0;//flag used for finding if the indices to be deleted are valid
 		output=sym_get_num_cols(global_sym_env,&num_cols);//function to find the number of columns in the loaded problem
 		if(output==FUNCTION_TERMINATED_ABNORMALLY)
 		{
 			Scierror(999, "An error occured. Has a problem been loaded?\n");
+			free(value);//freeing the memory of the allocated pointer
+			return 0;
+		}
+		for(count=0;count<columns;count++)//loop used to check if all the indices mentioned to be deleted are valid
+		{
+			if(value[count]<0   ||  value[count]>=num_cols){
+				flag=1;
+				break;
+		}	
+				
+		}
+		if(flag==1)
+		{
+			Scierror(999,"Not valid indices..\n");
+			sciprint("valid indices are from 0 to %d",num_cols-1);
+			free(value);//freeing the memory of the allocated pointer
 			return 0;
 		}
 		//only when the number of columns to be deleted is lesser than the actual number of columns ,execution is proceeded with
@@ -104,6 +121,7 @@ int sci_sym_delete_cols(char *fname, unsigned long fname_len){
 	int e=createScalarDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,status);
 	if (e){
 		AssignOutputVariable(pvApiCtx, 1) = 0;
+		free(value);//freeing the memory of the allocated pointer
 		return 1;
 		}
 
@@ -175,6 +193,23 @@ int sci_sym_delete_rows(char *fname, unsigned long fname_len){
 		if(output==FUNCTION_TERMINATED_ABNORMALLY)
 		{
 			Scierror(999, "An error occured. Has a problem been loaded?\n");
+			free(value);//freeing the memory of the allocated pointer
+			return 0;
+		}
+		int flag=0;//variable to check if the entered indices are valid.
+		for(count=0;count<columns;count++)//loop used to check if all the indices mentioned to be deleted are valid
+		{
+			if(value[count]<0   ||  value[count]>=num_rows){
+				flag=1;
+				break;
+		}	
+				
+		}
+		if(flag==1)
+		{
+			Scierror(999,"Not valid indices..\n");
+			sciprint("valid constraint indices are from 0 to %d",num_rows-1);
+			free(value);//freeing the memory of the allocated pointer
 			return 0;
 		}
 		//only when the number of rows to be deleted is lesser than the actual number of rows ,execution is proceeded with
@@ -202,6 +237,7 @@ int sci_sym_delete_rows(char *fname, unsigned long fname_len){
 	int e=createScalarDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,status);
 	if (e){
 		AssignOutputVariable(pvApiCtx, 1) = 0;
+		free(value);//freeing the memory of the allocated pointer
 		return 1;
 		}
 
