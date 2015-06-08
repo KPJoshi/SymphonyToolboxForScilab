@@ -24,10 +24,11 @@ section=nonesec
 
 #infinite loop
 while True:
-	line=datfile.readline().strip() #get the line
-	if not line:
+	line=datfile.readline() #get the line, including end of line
+	if not line: #if at eof, then line is completely empty, without even a \n
 		break #break at eof
-	if line[0]=='#':
+	line=line.strip() #now strip it of the \n
+	if line=="" or line[0]=='#':
 		continue #ignore comments (lines starting with #)
 	if line=="function":
 		if section!=nonesec:
