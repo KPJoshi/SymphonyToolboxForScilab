@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry version="5.0-subset Scilab" xml:id="sym_open" xml:lang="en"
+					xmlns="http://docbook.org/ns/docbook"
+					xmlns:xlink="http://www.w3.org/1999/xlink"
+					xmlns:svg="http://www.w3.org/2000/svg"
+					xmlns:ns3="http://www.w3.org/1999/xhtml"
+					xmlns:mml="http://www.w3.org/1998/Math/MathML"
+					xmlns:db="http://docbook.org/ns/docbook">
+
+	<refnamediv>
+		<refname>sym_open</refname>
+
+		<refpurpose>Open Symphony Environment</refpurpose>
+	</refnamediv>
+
+	<refsynopsisdiv>
+		<title>Calling Sequence</title>
+
+		<synopsis>sym_open()</synopsis>
+	</refsynopsisdiv>
+
+	<refsection>
+		<title>Description</title>
+
+		<para>This function opens a new Symphony environment. This environment remains open till sym_close() is called.
+		This allows for the preservation of problem data across multiple function calls.</para>
+		
+		<para>This function will fail if an environment is already open.</para>
+	</refsection>
+
+	<refsection>
+		<title>Examples</title>
+
+		<programlisting role="example">sym_open()</programlisting>
+	</refsection>
+
+	<refsection>
+		<title>Authors</title>
+
+		<simplelist type="vert">
+			<member>Keyur Joshi</member>
+			<member>Iswarya</member>
+		</simplelist>
+	</refsection>
+</refentry>
