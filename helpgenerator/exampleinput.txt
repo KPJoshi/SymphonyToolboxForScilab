@@ -1,0 +1,22 @@
+#lines starting with # are ignored
+#start with line containing 'function'
+function
+#write function name (what you type in scilab) along with the arguments and their names
+sym_isInteger(index)
+#write short 1 line description
+Check if a variable is constrained to be an integer
+#write full description. 1 line = 1 paragraph. Describe each argument in its own paragraph
+This function checks if a variable is constrained to be an integer.
+index : Index of the variable to check. Must be in {0,1,2,...n-1} where n is the number of variables in the problem
+#write 'examples' in a line
+examples
+#give 1 or more examples
+sym_isInteger(2)
+#write 'authors' in a line
+authors
+#give the author names
+Keyur Joshi
+#write 'fend' in a line
+fend
+
+#repeat for each function
