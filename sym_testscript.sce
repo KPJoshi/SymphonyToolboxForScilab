@@ -102,6 +102,11 @@ sym_loadProblemBasic(8,3,[0,0,0,0,0,0,0,0],[1,1,1,1,%inf,%inf,%inf,%inf],[350*5,
 
 performLotsOfTests(8)
 
+//test 1 problem 7 : unbounded solution
+sym_loadProblemBasic(1,1,[0],[%inf],[1],[%t],sym_maximize,[1],[0],[%inf])
+
+performLotsOfTests(1)
+
 input("Test 1 complete. Press enter to clear console and perform next test.")
 
 clc
