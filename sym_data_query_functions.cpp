@@ -130,7 +130,14 @@ int sci_sym_get_dbl_arr(char *fname, unsigned long fname_len){
 				show_termination_status(ret_val);
 				if (ret_val == FUNCTION_TERMINATED_ABNORMALLY)
 					result_len=0;
-				else representation = matrix_representation[found_at];
+				else {
+					if (found_at == 6) {//if called function is sym_getObjCoeff
+						int iter=0,sense=0,status2 = sym_get_obj_sense(global_sym_env,&sense);
+						if (sense == -1) // Multiply with -1 while showing 
+							for (;iter < result_len;++iter) result[iter] *= -1; 						
+						}
+					representation = matrix_representation[found_at];
+					}				
 				}
 			else
 				sciprint("\n Is a problem loaded ? \n");
