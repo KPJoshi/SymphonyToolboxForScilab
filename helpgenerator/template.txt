@@ -9,19 +9,29 @@
 
 	<refnamediv>
 		<refname>FUNNAME</refname>
-
 		<refpurpose>PURPOSE</refpurpose>
 	</refnamediv>
 
 	<refsynopsisdiv>
 		<title>Calling Sequence</title>
-
 		<synopsis>FUNFULL</synopsis>
 	</refsynopsisdiv>
 
 	<refsection>
 		<title>Description</title>
 
+SPLITHERE
+	</refsection>
+
+	<refsection>
+		<title>Arguments</title>
+
+SPLITHERE
+	</refsection>
+
+	<refsection>
+		<title>Return value</title>
+		
 SPLITHERE
 	</refsection>
 

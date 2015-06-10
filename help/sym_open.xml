@@ -9,29 +9,41 @@
 
 	<refnamediv>
 		<refname>sym_open</refname>
-
-		<refpurpose>Open Symphony Environment</refpurpose>
+		<refpurpose>Open the Symphony environment</refpurpose>
 	</refnamediv>
 
 	<refsynopsisdiv>
 		<title>Calling Sequence</title>
-
 		<synopsis>sym_open()</synopsis>
 	</refsynopsisdiv>
 
 	<refsection>
 		<title>Description</title>
 
-		<para>This function opens a new Symphony environment. This environment remains open till sym_close() is called.
-		This allows for the preservation of problem data across multiple function calls.</para>
+		<para>Opens the Symphony environment. The environment and all data loaded into it is maintained across function calls.</para>
+		<para>This function fails if the environment is already open.</para>
+
+	</refsection>
+
+	<refsection>
+		<title>Arguments</title>
+
+		<para>This function takes no arguments</para>
+
+	</refsection>
+
+	<refsection>
+		<title>Return value</title>
 		
-		<para>This function will fail if an environment is already open.</para>
+		<para>Returns 1 if the environment was successfully opened and 0 otherwise</para>
+
 	</refsection>
 
 	<refsection>
 		<title>Examples</title>
 
 		<programlisting role="example">sym_open()</programlisting>
+
 	</refsection>
 
 	<refsection>
@@ -40,6 +52,8 @@
 		<simplelist type="vert">
 			<member>Keyur Joshi</member>
 			<member>Iswarya</member>
+
 		</simplelist>
 	</refsection>
 </refentry>
+
