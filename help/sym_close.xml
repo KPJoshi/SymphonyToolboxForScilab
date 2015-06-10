@@ -9,29 +9,41 @@
 
 	<refnamediv>
 		<refname>sym_close</refname>
-
-		<refpurpose>Close Symphony Environment</refpurpose>
+		<refpurpose>Close the Symphony environment</refpurpose>
 	</refnamediv>
 
 	<refsynopsisdiv>
 		<title>Calling Sequence</title>
-
 		<synopsis>sym_close()</synopsis>
 	</refsynopsisdiv>
 
 	<refsection>
 		<title>Description</title>
 
-		<para>This function closes the currently open Symphony environment. 
-		All data that has been loaded into the environment is deleted.</para>
+		<para>Closes the already open Symphony environment.</para>
+		<para>Warning: All data loaded into the environment is deleted.</para>
+
+	</refsection>
+
+	<refsection>
+		<title>Arguments</title>
+
+		<para>This function takes no arguments</para>
+
+	</refsection>
+
+	<refsection>
+		<title>Return value</title>
 		
-		<para>This function will fail if an environment is not open.</para>
+		<para>Returns 1 if the environment was successfully closed and 0 otherwise</para>
+
 	</refsection>
 
 	<refsection>
 		<title>Examples</title>
 
 		<programlisting role="example">sym_close()</programlisting>
+
 	</refsection>
 
 	<refsection>
@@ -40,6 +52,8 @@
 		<simplelist type="vert">
 			<member>Keyur Joshi</member>
 			<member>Iswarya</member>
+
 		</simplelist>
 	</refsection>
 </refentry>
+

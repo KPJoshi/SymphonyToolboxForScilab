@@ -7,7 +7,14 @@ sym_isInteger(index)
 Check if a variable is constrained to be an integer
 #write full description. 1 line = 1 paragraph. Describe each argument in its own paragraph
 This function checks if a variable is constrained to be an integer.
-index : Index of the variable to check. Must be in {0,1,2,...n-1} where n is the number of variables in the problem
+#write 'args' in a line if there are arguments and 'noargs' if there are no arguments
+args
+#write each argument (if any) in a line, starting with the argument name and followed by the description
+index Index of the variable to check. Must be in {0,1,2,...n-1} where n is the number of variables in the problem
+#write 'return' in a line
+return
+#write description of return value
+Returns 1 if the variable is constrained to be an integer and 0 if it is not.
 #write 'examples' in a line
 examples
 #give 1 or more examples
@@ -20,3 +27,33 @@ Keyur Joshi
 fend
 
 #repeat for each function
+
+function
+sym_open()
+Open the Symphony environment
+Opens the Symphony environment. The environment and all data loaded into it is maintained across function calls.
+This function fails if the environment is already open.
+noargs
+return
+Returns 1 if the environment was successfully opened and 0 otherwise
+examples
+sym_open()
+authors
+Keyur Joshi
+Iswarya
+fend
+
+function
+sym_close()
+Close the Symphony environment
+Closes the already open Symphony environment.
+Warning: All data loaded into the environment is deleted.
+noargs
+return
+Returns 1 if the environment was successfully closed and 0 otherwise
+examples
+sym_close()
+authors
+Keyur Joshi
+Iswarya
+fend
