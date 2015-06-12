@@ -5,9 +5,9 @@ lines(0)
 //By Keyur Joshi, Sai Kiran and Iswarya
 
 WITHOUT_AUTO_PUTLHSVAR = %t;
-TOOLBOX_TITLE = "symphonytools"
+toolbox_title = "symphonytools"
 
-tbx_build_gateway(TOOLBOX_TITLE, ..
+tbx_build_gateway(toolbox_title, ..
 	[
 		//for opening/closing environment and checking if it is open/close
 		"sym_open","sci_sym_open";
@@ -117,6 +117,6 @@ tbx_build_gateway(TOOLBOX_TITLE, ..
 	], ..
 	get_absolute_file_path("builder.sce"), [], ["-lSym"], ["-w -fpermissive -I/usr/include/coin"], [], "g++");
 
-exec ./help/builder_help.sce;
+tbx_builder_help(get_absolute_file_path("builder.sce"));
 
-clear WITHOUT_AUTO_PUTLHSVAR TOOLBOX_TITLE;
+clear WITHOUT_AUTO_PUTLHSVAR toolbox_title;
