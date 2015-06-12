@@ -12,6 +12,7 @@ libsymphonytools.c
 # Generated help files
 help/master_help.xml
 help/scilab_help_help/*
+help/addchapter.sce
 
 # Help generator files
 helpgenerator/*
