@@ -46,7 +46,7 @@
 	<refsection>
 		<title>Examples</title>
 
-		<programlisting role="example">sym_getPrimalBound(10)</programlisting>
+		<programlisting role="example">sym_setPrimalBound(10)</programlisting>
 
 	</refsection>
 
