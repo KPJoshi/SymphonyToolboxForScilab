@@ -24,7 +24,7 @@ int process_ret_val(int);
  */
 int sci_sym_get_status(char *fname, unsigned long fname_len){
 
-	int status=0; // Assuming abnormal termination
+	int status=0;
   
 	//check whether we have no input and one output argument or not
 	CheckInputArgument(pvApiCtx, 0, 0) ;//no input argument

@@ -32,7 +32,7 @@ void show_termination_status(int status) {
 */
 int sci_sym_get_num_int(char *fname, unsigned long fname_len){
 
-	int result=0;/* Result of the callar */
+	int result=-1;/* Result of the callar */
   
 	//check whether we have no input and one output argument or not
 	CheckInputArgument(pvApiCtx, 0, 0) ; //no input argument
@@ -60,7 +60,7 @@ int sci_sym_get_num_int(char *fname, unsigned long fname_len){
 			int ret_val=fun[found_at](global_sym_env,&result);
 			show_termination_status(ret_val);
 			if (ret_val == FUNCTION_TERMINATED_ABNORMALLY)
-				result=0;
+				result=-1;
 			}
 		else //very rare case
 			sciprint("\nError in function mapping in scilab script\n");
