@@ -124,4 +124,4 @@ tbx_build_gateway(toolbox_title, ..
 
 tbx_builder_help(get_absolute_file_path("builder.sce"));
 
-clear WITHOUT_AUTO_PUTLHSVAR toolbox_title;
+clear WITHOUT_AUTO_PUTLHSVAR toolbox_title LINKER_FLAGS;
