@@ -4,6 +4,11 @@ lines(0)
 //Symphony toolbox builder
 //By Keyur Joshi, Sai Kiran and Iswarya
 
+// By default, just link to symphony library installed in the system, say in /usr/lib
+LINKER_FLAGS=["-w -fpermissive -lSym"];
+// Or uncomment this to set a path to a locally installed copy of symphony
+//LINKER_FLAGS=["-w -fpermissive -I/home/amahajan/projects/symphony/trunk/build2/include/coin -Wl,-rpath=/home/amahajan/projects/symphony/trunk/build2/lib -L/home/amahajan/projects/symphony/trunk/build2/lib -lSym"];
+
 WITHOUT_AUTO_PUTLHSVAR = %t;
 toolbox_title = "symphonytools"
 
@@ -115,7 +120,7 @@ tbx_build_gateway(toolbox_title, ..
 		"sci_sym_getobjsense.cpp",
 		"sci_sym_remove.cpp",
 	], ..
-	get_absolute_file_path("builder.sce"), [], ["-lSym"], ["-w -fpermissive -I/usr/include/coin"], [], "g++");
+	get_absolute_file_path("builder.sce"), [], ["-lSym"], LINKER_FLAGS, [], "g++");
 
 tbx_builder_help(get_absolute_file_path("builder.sce"));
 
