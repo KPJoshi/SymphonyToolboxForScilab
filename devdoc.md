@@ -32,6 +32,14 @@ The following functions are available (The names should be self explanatory):
 Anything that is not a pointer is data that is to be passed to the function.
 Anything that is a pointer is the destination for data that will be returned by the function.
 All functions return 0 if no errors occur and 1 if any error occurs.
+The general procedure followed by the functions that get data from Scilab is as follows:
+
+1. Get the address of the data from its argument number
+2. Check that the data is of the correct type
+3. If getting matrix data, check that the matrix is of the right size, if necessary
+4. Retrieve the data
+5. Perform type conversion if necessary
+6. Give the data to the rest of the program
 
 ## `template.cpp`
 
