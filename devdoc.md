@@ -75,9 +75,9 @@ An algorithm for converting from the Scilab format to the Symphony format is pre
 You might have installed **Symphony** library using one of these ways:
 
 1. If you did it from official software repository ( Ex: using `apt-get` in **ubuntu** or `yum` in **fedora** ) then 
-	* While compiling the project you need to supply the path to **Symphony** *header files* using 
+	* While compiling the toolbox you need to supply the path to **Symphony** *header files* using 
 	  `-I` flag (`-I/usr/include/coin`) and *library name* as `-lSym`. Finally *cflags* argument of 		  `tbx_build_gateway` will be `-I/usr/include/coin -lSym`.
-	* In this case *dynamic linker* can find symphony shared libraries in standard location of 	                  libraries(i.e. `/usr/lib`) where the dynamic linker will search for.
+	* In this case *dynamic linker* can find symphony shared libraries in standard location of 	                  libraries(i.e. `/usr/lib`) where the dynamic linker will search for libraries .
 
 2. If you did it by downloading source and following `./configure`,`make`,`make install` steps
 	* While compiling the toolbox you need to supply the path to **Symphony** *header files* using  `-I` 		flag , the path to *shared libraries* using `-L` flag , some linker flags and library name as `-lSym`.
@@ -85,7 +85,6 @@ You might have installed **Symphony** library using one of these ways:
 	`/home/saikiran/SYMPHONY-5.6.10`) . You can find Symphony header files in *path*`/include/coin` and		shared libraries in *path*`/lib`.  Finally *cflags* argument of `tbx_build_gateway` will be 			`-I/home/saikiran/SYMPHONY-5.6.10/include/coin -L/home/saikiran/SYMPHONY-5.6.10/lib 			        -Wl,-rpath=/home/saikiran/SYMPHONY-5.6.10/lib -lSym`.
 
 	* We require `-Wl,-rpath=/home/saikiran/SYMPHONY-5.6.10/lib` to make shared libraries available during           run-time. Because we don't have shared libraries in standard location where *dynamic linker* searches           for libraries.
-
 
 
 Before executing the `builder.sce` make sure that you are providing path to header
