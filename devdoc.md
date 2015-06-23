@@ -80,6 +80,9 @@ You might have installed **Symphony** library using one of these ways:
 2. By downloading source and following `./configure`,`make`,`make install` steps
 	* While compiling the project you nedd to supply the path to **Symphony** *header files* as well as *shared libraries* 
 Before executing the `builder.sce` make sure that you are providing path to header
+
 ## Additional help
 
 Additional help can be obtained from the 'API Scilab' section of the Scilab user documentation. It details the functions available for getting data from Scilab and returning data back to it.
+
+Symphony documentation is available at [Additional Information & Documentation ](https://projects.coin-or.org/SYMPHONY/#DocumentationandAdditionalInformation)
