@@ -71,7 +71,9 @@ Symphony, however, requires the following format:
 An algorithm for converting from the Scilab format to the Symphony format is present in the `sci_sym_loadProblem` function in the file `sci_sym_loadproblem.cpp`. An algorithm for the reverse process is present in the `column_major_to_row_major` function in the file `sym_data_query_functions.cpp`.
 
 ## Compilation
+
 You might have installed **Symphony** library using one of these ways:
+
 1. From official software repository using `apt-get` in **ubuntu** or `yum` in **fedora**
 	* While compiling the project you need to supply the path to **Symphony** header files using `-I` flag
 	  Like `-I/usr/include/coin -lSym`.
