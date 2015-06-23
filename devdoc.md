@@ -75,8 +75,8 @@ An algorithm for converting from the Scilab format to the Symphony format is pre
 You might have installed **Symphony** library using one of these ways:
 
 1. From official software repository using `apt-get` in **ubuntu** or `yum` in **fedora**
-	* While compiling the project you need to supply the path to **Symphony** header files using `-I` flag
-	  Like `-I/usr/include/coin -lSym`.
+	* While compiling the project you need to supply the path to **Symphony** header files using 
+	  `-I` flag Like `-I/usr/include/coin -lSym`.
 2. By downloading source and following `./configure`,`make`,`make install` steps
 	* While compiling the project you nedd to supply the path to **Symphony** *header files* as well as *shared libraries* 
 Before executing the `builder.sce` make sure that you are providing path to header
@@ -85,4 +85,4 @@ Before executing the `builder.sce` make sure that you are providing path to head
 
 Additional help can be obtained from the 'API Scilab' section of the Scilab user documentation. It details the functions available for getting data from Scilab and returning data back to it.
 
-Symphony documentation is available at [Additional Information & Documentation ](https://projects.coin-or.org/SYMPHONY/#DocumentationandAdditionalInformation)
+For more information visit Symphony [ Documentation & Additional Information](https://projects.coin-or.org/SYMPHONY/#DocumentationandAdditionalInformation)
