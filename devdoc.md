@@ -74,11 +74,13 @@ An algorithm for converting from the Scilab format to the Symphony format is pre
 
 You might have installed **Symphony** library using one of these ways:
 
-1. From official software repository using `apt-get` in **ubuntu** or `yum` in **fedora**
-	* While compiling the project you need to supply the path to **Symphony** header files using 
-	  `-I` flag Like `-I/usr/include/coin -lSym`.
-2. By downloading source and following `./configure`,`make`,`make install` steps
-	* While compiling the project you nedd to supply the path to **Symphony** *header files* as well as *shared libraries* 
+1. If you did it from official software repository ( Ex: using `apt-get` in **ubuntu** or `yum` in **fedora** ) then 
+	* While compiling the project you need to supply the path to **Symphony** *header files* using 
+	  `-I` flag (`-I/usr/include/coin`) and *library name* as `-lSym`. Finally *cflags* argument of 		  `tbx_build_gateway` will be `-I/usr/include/coin -lSym`.
+
+2. If you didi it by downloading source and following `./configure`,`make`,`make install` steps
+	* While compiling the project you need to supply the path to **Symphony** *header files* using  `-I` flag , the path to *shared libraries* using `-L` flag , some linker flags and library name as `-lSym`.
+	* For example 
 Before executing the `builder.sce` make sure that you are providing path to header
 
 ## Additional help
