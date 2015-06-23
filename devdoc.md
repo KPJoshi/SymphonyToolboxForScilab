@@ -87,7 +87,7 @@ You might have installed **Symphony** library using one of these ways:
 	* We require `-Wl,-rpath=/home/saikiran/SYMPHONY-5.6.10/lib` to make shared libraries available during           run-time. Because we don't have shared libraries in standard location where *dynamic linker* searches           for libraries.
 
 
-Before executing the `builder.sce` make sure that you are providing path to header
+Before executing the `builder.sce` make sure that you are providing valid *cflags* .
 
 ## Additional help
 
