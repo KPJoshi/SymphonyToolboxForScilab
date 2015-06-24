@@ -14,7 +14,7 @@
 
 	<refsynopsisdiv>
 		<title>Calling Sequence</title>
-		<synopsis>sym_loadProblemBasic(nbVar,nbConstr,varMin,varMax,objCoeff,isInt,objSense,conMatrix,conMin,conMax)</synopsis>
+		<synopsis>sym_loadProblemBasic(nbVar,nbConstr,varLB,varUB,objCoeff,isInt,objSense,conMatrix,conLB,conUB)</synopsis>
 	</refsynopsisdiv>
 
 	<refsection>
@@ -39,11 +39,11 @@
 				<para>Number of constraints</para>
 			</varlistentry>
 			<varlistentry>
-				<term>varMin</term>
+				<term>varLB</term>
 				<para>Matrix containing lower bounds of the variables (must have size 1 row and nbVar columns). Bound can be negative infinity</para>
 			</varlistentry>
 			<varlistentry>
-				<term>varMax</term>
+				<term>varUB</term>
 				<para>Matrix containing upper bounds of the variables (must have size 1 row and nbVar columns). Bound can be infinity</para>
 			</varlistentry>
 			<varlistentry>
@@ -63,11 +63,11 @@
 				<para>Matrix (normal) representing the constraint matrix (must have size nbConstr rows and nbVar columns)</para>
 			</varlistentry>
 			<varlistentry>
-				<term>conMin</term>
+				<term>conLB</term>
 				<para>Matrix containing lower bounds of the constraints (must have size nbConstr rows and 1 column)</para>
 			</varlistentry>
 			<varlistentry>
-				<term>conMax</term>
+				<term>conUB</term>
 				<para>Matrix containing upper bounds of the constraints (must have size nbConstr rows and 1 column)</para>
 			</varlistentry>
 		</variablelist>
