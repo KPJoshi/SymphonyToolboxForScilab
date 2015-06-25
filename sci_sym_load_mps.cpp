@@ -23,7 +23,7 @@ int sci_sym_load_mps(char *fname, unsigned long fname_len){
 	SciErr sciErr;
 
 	//data declarations
-	double status=0.0;//assume error status
+	double status=1.0;//assume error status
 	int *piAddressVarOne = NULL;//pointer used to access argument of the function
 	char file[100];//string to hold the name of .mps file
 	char* ptr=file;//pointer to point to address of file name
@@ -55,12 +55,12 @@ int sci_sym_load_mps(char *fname, unsigned long fname_len){
 		output=sym_read_mps(global_sym_env,ptr);//loading .mps file to symphony
 		if(output==FUNCTION_TERMINATED_ABNORMALLY || output==ERROR__READING_MPS_FILE)
 		{
-			status=0.0;//function did not invoke successfully
+			status=1.0;//function did not invoke successfully
 			sciprint("Error while reading file\n");
 		}
 		else if(output==FUNCTION_TERMINATED_NORMALLY)
 		{
-			status=1.0;//no error in executing the function
+			status=0.0;//no error in executing the function
 			sciprint("File read successfully\n");
 		}
 	}

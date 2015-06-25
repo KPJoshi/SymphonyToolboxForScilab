@@ -5,7 +5,7 @@ lines(0)
 //By Keyur Joshi, Sai Kiran and Iswarya
 
 // By default, just link to symphony library installed in the system, say in /usr/lib
-LINKER_FLAGS=["-w -fpermissive -lSym"];
+LINKER_FLAGS=["-w -fpermissive -I/usr/include/coin -lSym"];
 // Or uncomment this to set a path to a locally installed copy of symphony
 //LINKER_FLAGS=["-w -fpermissive -I/home/amahajan/projects/symphony/trunk/build2/include/coin -Wl,-rpath=/home/amahajan/projects/symphony/trunk/build2/lib -L/home/amahajan/projects/symphony/trunk/build2/lib -lSym"];
 

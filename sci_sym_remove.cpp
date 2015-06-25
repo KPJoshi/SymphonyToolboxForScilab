@@ -19,7 +19,7 @@ int sci_sym_delete_cols(char *fname, unsigned long fname_len){
 	
 	// Error management variables
 	SciErr sciErr1,sciErr2;
-	double status=0.0;//assume error status
+	double status=1.0;//assume error status
 	double num;//variable to store the number of columns to be deleted obtained from user in scilab
 	int count=0;//iterator variable
 	int num_cols;//stores the number of columns in the loaded problem
@@ -102,18 +102,18 @@ int sci_sym_delete_cols(char *fname, unsigned long fname_len){
 		if(output==FUNCTION_TERMINATED_NORMALLY)
 		{
 			sciprint("Execution is successfull\n");
-			status=1.0;
+			status=0.0;
 		}
 		else if(output==FUNCTION_TERMINATED_ABNORMALLY)
 		{
 			Scierror(999,"Problem occured while deleting the columns,Are the column numbers correct?\n");
 			sciprint("Function terminated abnormally\n");
-			status=0.0;
+			status=1.0;
 		}
 	}
 		else{
 			sciprint("These many number of variables dont exist in the problem\n");
-			status=0.0;
+			status=1.0;
 		}
 				
 	}
@@ -137,7 +137,7 @@ int sci_sym_delete_rows(char *fname, unsigned long fname_len){
 	
 	// Error management variable
 	SciErr sciErr1,sciErr2;
-	double status=0.0;//assume error status
+	double status=1.0;//assume error status
 	int count=0;//iterator variable
 	int num_rows;//stores the number of columns in the loaded problem
 	int iType= 0;//stores the datatype of matrix 
@@ -218,18 +218,18 @@ int sci_sym_delete_rows(char *fname, unsigned long fname_len){
 		if(output==FUNCTION_TERMINATED_NORMALLY)
 		{
 			sciprint("Execution is successfull\n");
-			status=1.0;
+			status=0.0;
 		}
 		else if(output==FUNCTION_TERMINATED_ABNORMALLY)
 		{
 			Scierror(999,"Problem occured while deleting the columns,Are the column numbers correct?\n");
 			sciprint("Function terminated abnormally\n");
-			status=0.0;
+			status=1.0;
 		}
 	}
 		else{
 			sciprint("These many number of constraints dont exist in the problem\n");
-			status=0.0;
+			status=1.0;
 		}
 				
 	}

@@ -9,11 +9,13 @@
 
 	<refnamediv>
 		<refname>sym_isInteger</refname>
+
 		<refpurpose>Check if a variable is constrained to be an integer</refpurpose>
 	</refnamediv>
 
 	<refsynopsisdiv>
 		<title>Calling Sequence</title>
+
 		<synopsis>sym_isInteger(index)</synopsis>
 	</refsynopsisdiv>
 
@@ -21,25 +23,7 @@
 		<title>Description</title>
 
 		<para>This function checks if a variable is constrained to be an integer.</para>
-
-	</refsection>
-
-	<refsection>
-		<title>Arguments</title>
-
-		<variablelist>
-			<varlistentry>
-				<term>index</term>
-				<para>Index of the variable to check. Must be in {0,1,2,...n-1} where n is the number of variables in the problem</para>
-			</varlistentry>
-		</variablelist>
-
-	</refsection>
-
-	<refsection>
-		<title>Return value</title>
-		
-		<para>Returns 1 if the variable is constrained to be an integer and 0 if it is not.</para>
+		<para>index : Index of the variable to check. Must be in {0,1,2,...n-1} where n is the number of variables in the problem</para>
 
 	</refsection>
 
