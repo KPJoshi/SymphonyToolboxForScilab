@@ -17,7 +17,7 @@ extern "C" {
 //This function is for loading a mps file to symphony
 int sci_sym_set_defaults(char *fname, unsigned long fname_len){
 	
-	double status=0.0;//assume error status
+	double status=1.0;//assume error status
 	int *piAddressVarOne = NULL;//pointer used to access argument of the function
 	int output=0;//out parameter for the setting of default values  function
 	CheckInputArgument(pvApiCtx, 0, 0);//Check we no argument as input or not
@@ -31,12 +31,12 @@ int sci_sym_set_defaults(char *fname, unsigned long fname_len){
 		output=sym_set_defaults(global_sym_env);//setting all environment variables and parameters in this symphony environment passed to their default values
 		if(output==FUNCTION_TERMINATED_ABNORMALLY)
 		{
-			status=0.0;//function did not invoke successfully
+			status=1.0;//function did not invoke successfully
 			sciprint("Function terminated abnormally,didnot execute");
 		}
 		else if(output==FUNCTION_TERMINATED_NORMALLY)
 		{
-			status=1.0;//no error in executing the function
+			status=0.0;//no error in executing the function
 			sciprint("Function executed successfully");
 		}
 		
@@ -61,8 +61,9 @@ int sci_sym_set_int_param(char *fname, unsigned long fname_len){
 	
 	// Error management variable
 	SciErr sciErr1,sciErr2;
-	double status=0.0;//assume error status
+	double status=1.0;//assume error status
 	double num;//to store and check the value obtained is pure unsigned integer
+	int output;//output variable to store the return value of symphony set integer function
 	int value;//to store the value of integer to be set
 	int *piAddressVarOne = NULL;//pointer used to access first argument of the function
 	int *piAddressVarTwo=NULL;//pointer used to access second argument of the function
@@ -101,9 +102,17 @@ int sci_sym_set_int_param(char *fname, unsigned long fname_len){
 		sciprint("Error: Symphony environment not initialized. Please run 'sym_open()' first.\n");
 		}
 	else {
-		sym_set_int_param(global_sym_env,ptr,value);//symphony function to set the variable name pointed by the ptr pointer to the integer value stored in value variable.
+		output=sym_set_int_param(global_sym_env,ptr,value);//symphony function to set the variable name pointed by the ptr pointer to the integer value stored in value variable.
+		if(output==FUNCTION_TERMINATED_NORMALLY){
 		sciprint("setting of integer parameter function executed successfully\n");
-		status=1.0;
+		status=0.0;	
+		}
+		else if(output==FUNCTION_TERMINATED_ABNORMALLY){
+			sciprint("setting of integer parameter was unsuccessful.....check your parameter and value\n");
+			status=1.0;
+		}
+		else
+			sciprint("\nerror while executing the setting integer function...check your parameter and value!!\n");
 		
 		}
 	
@@ -124,11 +133,11 @@ int sci_sym_get_int_param(char *fname, unsigned long fname_len){
 	
 	// Error management variable
 	SciErr sciErr1;
-	double status=0.0;//assume error status
+	double status=1.0;//assume error status
 	int *piAddressVarOne = NULL;//pointer used to access first argument of the function
 	char variable_name[100];//string to hold the name of variable's value to be retrieved
 	char *ptr=variable_name;//pointer to point to address of the variable name
-	int output=0;//output parameter for the symphony get_int_param function
+	int output;//output parameter for the symphony get_int_param function
 	CheckInputArgument(pvApiCtx, 1, 1);//Check we have exactly one argument as input or not
 	CheckOutputArgument(pvApiCtx, 1, 1);//Check we have exactly one argument on output side or not
 
@@ -153,9 +162,15 @@ int sci_sym_get_int_param(char *fname, unsigned long fname_len){
 		}
 	else {
 		int a;//local variable to store the value of variable name we want to retrieve
-		sym_get_int_param(global_sym_env,ptr,&a);//symphony function to get the value of integer parameter pointed by ptr pointer and store it in 'a' variable
-		sciprint("value of integer parameter %s is :: %d\n",ptr,a);
-		status=1.0;
+		output=sym_get_int_param(global_sym_env,ptr,&a);//symphony function to get the value of integer parameter pointed by ptr pointer and store it in 'a' variable
+		if(output==FUNCTION_TERMINATED_NORMALLY){			
+			sciprint("value of integer parameter %s is :: %d\n",ptr,a);
+			status=0.0;
+		}
+		else{
+			sciprint("Unable to get the value of the parameter...check the input values!!\n");
+			status=1.0;
+		} 
 				
 		}
 	
@@ -177,8 +192,9 @@ int sci_sym_set_dbl_param(char *fname, unsigned long fname_len){
 	
 	// Error management variable
 	SciErr sciErr1,sciErr2;
-	double status=0.0;//assume error status
+	double status=1.0;//assume error status
 	double num;//to store the value of the double parameter to be set
+	int output;//output parameter for the symphomy setting double parameter function
 	int *piAddressVarOne = NULL;//pointer used to access first argument of the function
 	int *piAddressVarTwo=NULL;//pointer used to access second argument of the function
 	char variable_name[100];//string to hold the name of variable's value to be set
@@ -210,9 +226,13 @@ int sci_sym_set_dbl_param(char *fname, unsigned long fname_len){
 		sciprint("Error: Symphony environment not initialized. Please run 'sym_open()' first.\n");
 		}
 	else {
-		sym_set_dbl_param(global_sym_env,ptr,num);//symphony function to set the variable name pointed by the ptr pointer to the double value stored in 'value' variable.
-		sciprint("setting of double parameter function executed successfully\n");
-		status=1.0;
+		output=sym_set_dbl_param(global_sym_env,ptr,num);//symphony function to set the variable name pointed by the ptr pointer to the double value stored in 'value' variable.
+		if(output==FUNCTION_TERMINATED_NORMALLY){		
+			sciprint("setting of double parameter function executed successfully\n");
+			status=0.0;
+		}
+		else
+			sciprint("Function did not execute successfully...check your inputs!!!\n");
 		
 		}
 	
@@ -233,11 +253,11 @@ int sci_sym_get_dbl_param(char *fname, unsigned long fname_len){
 	
 	// Error management variable
 	SciErr sciErr1;
-	double status=0.0;//assume error status
+	double status=1.0;//assume error status
 	int *piAddressVarOne = NULL;//pointer used to access first argument of the function
 	char variable_name[100];//string to hold the name of variable's value to be retrieved
 	char *ptr=variable_name;//pointer to point to address of the variable name
-	int output=0;//output parameter for the symphony get_dbl_param function
+	int output;//output parameter for the symphony get_dbl_param function
 	CheckInputArgument(pvApiCtx, 1, 1);//Check we have exactly one argument as input or not
 	CheckOutputArgument(pvApiCtx, 1, 1);//Check we have exactly one argument on output side or not
 
@@ -262,10 +282,17 @@ int sci_sym_get_dbl_param(char *fname, unsigned long fname_len){
 		}
 	else {
 		double a;//local variable to store the value of variable name we want to retrieve
-		sym_get_dbl_param(global_sym_env,ptr,&a);//symphony function to get the value of double parameter pointed by ptr pointer and store it in 'a' variable
-		sciprint("value of double parameter %s is :: %lf\n",ptr,a);
-		status=1.0;
-				
+		output=sym_get_dbl_param(global_sym_env,ptr,&a);//symphony function to get the value of double parameter pointed by ptr pointer and store it in 'a' variable
+		if(output==FUNCTION_TERMINATED_NORMALLY){
+			sciprint("value of double parameter %s is :: %lf\n",ptr,a);
+			status=1.0;
+		}
+		else{
+			sciprint("Unable to get the value of the parameter...check the input values!!\n");
+			status=1.0;
+		} 
+
+
 		}
 	
 	int e=createScalarDouble(pvApiCtx,nbInputArgument(pvApiCtx)+1,status);
@@ -285,8 +312,9 @@ int sci_sym_set_str_param(char *fname, unsigned long fname_len){
 	
 	// Error management variable
 	SciErr sciErr1,sciErr2;
-	double status=0.0;//assume error status
+	double status=1.0;//assume error status
 	double num;//to store the value of the double parameter to be set
+	int output;//output return value of the setting of symphony string parameter function
 	int *piAddressVarOne = NULL;//pointer used to access first argument of the function
 	int *piAddressVarTwo=NULL;//pointer used to access second argument of the function
 	char variable_name[100],value[100];//string to hold the name of variable's value to be set and the value to be set is stored in 'value' string
@@ -318,9 +346,13 @@ int sci_sym_set_str_param(char *fname, unsigned long fname_len){
 		sciprint("Error: Symphony environment not initialized. Please run 'sym_open()' first.\n");
 		}
 	else {
-		sym_set_str_param(global_sym_env,ptr,valptr);//symphony function to set the variable name pointed by the ptr pointer to the double value stored in 'value' variable.
-		sciprint("setting of string parameter function executed successfully\n");
-		status=1.0;
+		output=sym_set_str_param(global_sym_env,ptr,valptr);//symphony function to set the variable name pointed by the ptr pointer to the double value stored in 'value' variable.
+		if(output==FUNCTION_TERMINATED_NORMALLY){
+			sciprint("setting of string parameter function executed successfully\n");
+			status=0.0;
+		}
+		else
+			sciprint("Setting of the string parameter was unsuccessfull...check the input values!!\n");
 		
 		}
 	
@@ -341,11 +373,11 @@ int sci_sym_get_str_param(char *fname, unsigned long fname_len){
 	
 	// Error management variable
 	SciErr sciErr1;
-	double status=0.0;//assume error status
+	double status=1.0;//assume error status
 	int *piAddressVarOne = NULL;//pointer used to access first argument of the function
 	char variable_name[100];//string to hold the name of variable's value to be retrieved
 	char *ptr=variable_name;//pointer to point to address of the variable name
-	int output=0;//output parameter for the symphony get_dbl_param function
+	int output;//output parameter for the symphony get_dbl_param function
 	CheckInputArgument(pvApiCtx, 1, 1);//Check we have exactly one argument as input or not
 	CheckOutputArgument(pvApiCtx, 1, 1);//Check we have exactly one argument on output side or not
 
@@ -371,9 +403,14 @@ int sci_sym_get_str_param(char *fname, unsigned long fname_len){
 	else {
 		char value[100];//local variable to store the value of variable name we want to retrieve
 		char *p=value;//pointer to store the address of the character array that contains the value of the string parameter to be retrieved
-		sym_get_str_param(global_sym_env,ptr,&p);//symphony function to get the value of string parameter pointed by ptr pointer and store it in 'p' pointer variable
-		sciprint("value of string parameter %s is :: %s\n",ptr,p);
-		status=1.0;
+		output=sym_get_str_param(global_sym_env,ptr,&p);//symphony function to get the value of string parameter pointed by ptr pointer and store it in 'p' pointer variable
+		if(output==FUNCTION_TERMINATED_NORMALLY){
+			sciprint("value of string parameter %s is :: %s\n",ptr,p);
+			status=0.0;
+		}
+		else
+			sciprint("The string parameter value could not be retrieved successfully...check the input values!!\n");
+
 				
 		}
 	
