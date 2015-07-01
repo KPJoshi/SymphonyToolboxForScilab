@@ -30,7 +30,7 @@
 		<variablelist>
 			<varlistentry>
 				<term>sense</term>
-				<para>The new sense of the objective function. Use sym_minimize or sym_maximize here</para>
+				<listitem><para>The new sense of the objective function. Use sym_minimize or sym_maximize here</para></listitem>
 			</varlistentry>
 		</variablelist>
 

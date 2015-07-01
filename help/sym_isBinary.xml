@@ -30,7 +30,7 @@
 		<variablelist>
 			<varlistentry>
 				<term>index</term>
-				<para>Index of the variable to check. Must be in {0,1,2,...n-1} where n is the number of variables in the problem</para>
+				<listitem><para>Index of the variable to check. Must be in {0,1,2,...n-1} where n is the number of variables in the problem</para></listitem>
 			</varlistentry>
 		</variablelist>
 

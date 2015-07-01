@@ -30,7 +30,7 @@
 		<variablelist>
 			<varlistentry>
 				<term>bound</term>
-				<para>The new primal bound for the problem</para>
+				<listitem><para>The new primal bound for the problem</para></listitem>
 			</varlistentry>
 		</variablelist>
 

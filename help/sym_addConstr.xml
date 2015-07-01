@@ -31,19 +31,19 @@
 		<variablelist>
 			<varlistentry>
 				<term>coeff</term>
-				<para>Sparse matrix representing coefficients of the variables in the new constraint (must have 1 row and number of columns equal to number of variables)</para>
+				<listitem><para>Sparse matrix representing coefficients of the variables in the new constraint (must have 1 row and number of columns equal to number of variables)</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>type</term>
-				<para>Type of the new constraint. Supported types: less than or equal to ("L"), greater than or equal to ("G"), equal to ("E"), or ranged ("R")</para>
+				<listitem><para>Type of the new constraint. Supported types: less than or equal to ("L"), greater than or equal to ("G"), equal to ("E"), or ranged ("R")</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>bound1</term>
-				<para>The first (or only) bound for the constraint</para>
+				<listitem><para>The first (or only) bound for the constraint</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>bound2</term>
-				<para>The second bound for ranged constraints. The two bounds for ranged constraints can be in any order.</para>
+				<listitem><para>The second bound for ranged constraints. The two bounds for ranged constraints can be in any order.</para></listitem>
 			</varlistentry>
 		</variablelist>
 

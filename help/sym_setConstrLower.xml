@@ -30,11 +30,11 @@
 		<variablelist>
 			<varlistentry>
 				<term>index</term>
-				<para>Index of the constraint to modify. Must be in {0,1,2,...n-1} where n is the number of constraints in the problem</para>
+				<listitem><para>Index of the constraint to modify. Must be in {0,1,2,...n-1} where n is the number of constraints in the problem</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>newBound</term>
-				<para>The new lower bound for the constraint</para>
+				<listitem><para>The new lower bound for the constraint</para></listitem>
 			</varlistentry>
 		</variablelist>
 
