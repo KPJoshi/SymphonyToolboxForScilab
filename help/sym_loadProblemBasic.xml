@@ -32,43 +32,43 @@
 		<variablelist>
 			<varlistentry>
 				<term>nbVar</term>
-				<para>Number of variables</para>
+				<listitem><para>Number of variables</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>nbConstr</term>
-				<para>Number of constraints</para>
+				<listitem><para>Number of constraints</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>varLB</term>
-				<para>Matrix containing lower bounds of the variables (must have size 1 row and nbVar columns). Bound can be negative infinity</para>
+				<listitem><para>Matrix containing lower bounds of the variables (must have size 1 row and nbVar columns). Bound can be negative infinity</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>varUB</term>
-				<para>Matrix containing upper bounds of the variables (must have size 1 row and nbVar columns). Bound can be infinity</para>
+				<listitem><para>Matrix containing upper bounds of the variables (must have size 1 row and nbVar columns). Bound can be infinity</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>objCoeff</term>
-				<para>Matrix containing coefficients of the variables in the objective (must have size 1 row and nbVar columns)</para>
+				<listitem><para>Matrix containing coefficients of the variables in the objective (must have size 1 row and nbVar columns)</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>isInt</term>
-				<para>Boolean matrix representing wether a variable is constrained to be an integer (must have size 1 row and nbVar columns)</para>
+				<listitem><para>Boolean matrix representing wether a variable is constrained to be an integer (must have size 1 row and nbVar columns)</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>objSense</term>
-				<para>The sense (maximization/minimization) of the objective. Use sym_minimize or sym_maximize here</para>
+				<listitem><para>The sense (maximization/minimization) of the objective. Use sym_minimize or sym_maximize here</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>conMatrix</term>
-				<para>Matrix (normal) representing the constraint matrix (must have size nbConstr rows and nbVar columns)</para>
+				<listitem><para>Matrix (normal) representing the constraint matrix (must have size nbConstr rows and nbVar columns)</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>conLB</term>
-				<para>Matrix containing lower bounds of the constraints (must have size nbConstr rows and 1 column)</para>
+				<listitem><para>Matrix containing lower bounds of the constraints (must have size nbConstr rows and 1 column)</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>conUB</term>
-				<para>Matrix containing upper bounds of the constraints (must have size nbConstr rows and 1 column)</para>
+				<listitem><para>Matrix containing upper bounds of the constraints (must have size nbConstr rows and 1 column)</para></listitem>
 			</varlistentry>
 		</variablelist>
 

@@ -31,19 +31,19 @@
 		<variablelist>
 			<varlistentry>
 				<term>index</term>
-				<para>Index of the constraint to modify. Must be in {0,1,2,...n-1} where n is the number of constraints in the problem</para>
+				<listitem><para>Index of the constraint to modify. Must be in {0,1,2,...n-1} where n is the number of constraints in the problem</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>type</term>
-				<para>New type of the constraint. Supported types: less than or equal to ("L"), greater than or equal to ("G"), equal to ("E"), or ranged ("R")</para>
+				<listitem><para>New type of the constraint. Supported types: less than or equal to ("L"), greater than or equal to ("G"), equal to ("E"), or ranged ("R")</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>bound1</term>
-				<para>The first (or only) bound for the constraint</para>
+				<listitem><para>The first (or only) bound for the constraint</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>bound2</term>
-				<para>The second bound for ranged constraints. The two bounds for ranged constraints can be in any order.</para>
+				<listitem><para>The second bound for ranged constraints. The two bounds for ranged constraints can be in any order.</para></listitem>
 			</varlistentry>
 		</variablelist>
 

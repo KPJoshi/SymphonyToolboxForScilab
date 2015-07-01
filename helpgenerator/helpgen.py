@@ -97,7 +97,7 @@ while True:
 			outfile.write("\t\t<para>"+line+"</para>\n")
 		elif section==argsec:
 			line=line.split(" ",maxsplit=1)
-			outfile.write("\t\t\t<varlistentry>\n\t\t\t\t<term>"+line[0]+"</term>\n\t\t\t\t<para>"+line[1]+"</para>\n\t\t\t</varlistentry>\n")
+			outfile.write("\t\t\t<varlistentry>\n\t\t\t\t<term>"+line[0]+"</term>\n\t\t\t\t<listitem><para>"+line[1]+"</para></listitem>\n\t\t\t</varlistentry>\n")
 		elif section==retsec:
 			outfile.write("\t\t<para>"+line+"</para>\n")
 		elif section==exsec:

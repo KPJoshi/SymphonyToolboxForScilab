@@ -30,27 +30,27 @@
 		<variablelist>
 			<varlistentry>
 				<term>coeff</term>
-				<para>Sparse matrix representing coefficients of the new variable in the existing constraints (must have 1 column and number of rows equal to number of constraints)</para>
+				<listitem><para>Sparse matrix representing coefficients of the new variable in the existing constraints (must have 1 column and number of rows equal to number of constraints)</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>lower</term>
-				<para>Lower bound of the new variable</para>
+				<listitem><para>Lower bound of the new variable</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>upper</term>
-				<para>Upper bound of the new variable</para>
+				<listitem><para>Upper bound of the new variable</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>obj</term>
-				<para>Coefficient of the variable in the objective function</para>
+				<listitem><para>Coefficient of the variable in the objective function</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>isInt</term>
-				<para>Wether the variable is constrainted to be an integer (boolean %t or %f)</para>
+				<listitem><para>Wether the variable is constrainted to be an integer (boolean %t or %f)</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>name</term>
-				<para>Name of the new variable</para>
+				<listitem><para>Name of the new variable</para></listitem>
 			</varlistentry>
 		</variablelist>
 

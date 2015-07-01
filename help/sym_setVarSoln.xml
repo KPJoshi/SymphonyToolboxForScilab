@@ -31,7 +31,7 @@
 		<variablelist>
 			<varlistentry>
 				<term>solution</term>
-				<para>Matrix containing solutions for the variables (must have size 1 row and number of columns equal to number of variables)</para>
+				<listitem><para>Matrix containing solutions for the variables (must have size 1 row and number of columns equal to number of variables)</para></listitem>
 			</varlistentry>
 		</variablelist>
 
