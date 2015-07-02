@@ -29,7 +29,7 @@
 		<variablelist>
 			<varlistentry>
 				<term>index</term>
-				<para>Index of the variable to be set continuous</para>
+				<listitem><para>Index of the variable to be set continuous</para></listitem>
 			</varlistentry>
 		</variablelist>
 

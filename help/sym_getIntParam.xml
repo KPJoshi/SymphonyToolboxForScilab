@@ -29,7 +29,7 @@
 		<variablelist>
 			<varlistentry>
 				<term>key</term>
-				<para>The name of the integer parameter whose value has to be retrieved. Note: should be given within " "</para>
+				<listitem><para>The name of the integer parameter whose value has to be retrieved. Note: should be given within " "</para></listitem>
 			</varlistentry>
 		</variablelist>
 
