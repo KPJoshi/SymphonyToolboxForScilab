@@ -42,7 +42,7 @@
 	<refsection>
 		<title>Examples</title>
 
-		<programlisting role="example">sym_getStatus()</programlisting>
+		<programlisting role="example">status=sym_getStatus()</programlisting>
 
 	</refsection>
 
@@ -50,7 +50,7 @@
 		<title>Authors</title>
 
 		<simplelist type="vert">
-			<member>Sai Kiran</member>
+			<member>Sai Kiran Naragam</member>
 
 		</simplelist>
 	</refsection>

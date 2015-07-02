@@ -41,7 +41,7 @@
 	<refsection>
 		<title>Examples</title>
 
-		<programlisting role="example">sym_getNumConstr()</programlisting>
+		<programlisting role="example">ans=sym_getNumConstr()</programlisting>
 
 	</refsection>
 
@@ -49,7 +49,7 @@
 		<title>Authors</title>
 
 		<simplelist type="vert">
-			<member>Sai Kiran</member>
+			<member>Sai Kiran Naragam</member>
 
 		</simplelist>
 	</refsection>
