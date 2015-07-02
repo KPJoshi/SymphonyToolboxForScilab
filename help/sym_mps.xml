@@ -29,7 +29,7 @@
 		<variablelist>
 			<varlistentry>
 				<term>filename</term>
-				<para>It is a string that has the path of the .mps file to loaded.It has to be given within double quotes ("")</para>
+				<listitem><para>It is a string that has the path of the .mps file to loaded.It has to be given within double quotes ("")</para></listitem>
 			</varlistentry>
 		</variablelist>
 

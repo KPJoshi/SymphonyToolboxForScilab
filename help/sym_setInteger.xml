@@ -29,7 +29,7 @@
 		<variablelist>
 			<varlistentry>
 				<term>index</term>
-				<para>The index of the variable type to be modified as integer. Note that, it has to be at most the number of columns.</para>
+				<listitem><para>The index of the variable type to be modified as integer. Note that, it has to be at most the number of columns.</para></listitem>
 			</varlistentry>
 		</variablelist>
 

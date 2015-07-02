@@ -29,7 +29,7 @@
 		<variablelist>
 			<varlistentry>
 				<term>indices</term>
-				<para>Pointer to an integer type array indicating the indices of the column numbers(variables) to be deleted.</para>
+				<listitem><para>Pointer to an integer type array indicating the indices of the column numbers(variables) to be deleted.</para></listitem>
 			</varlistentry>
 		</variablelist>
 

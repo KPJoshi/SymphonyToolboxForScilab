@@ -29,11 +29,11 @@
 		<variablelist>
 			<varlistentry>
 				<term>key</term>
-				<para>The name of the parameter to be set. Note:should be given within " "</para>
+				<listitem><para>The name of the parameter to be set. Note:should be given within " "</para></listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>value</term>
-				<para>New value of the corresponding integer parameter</para>
+				<listitem><para>New value of the corresponding integer parameter</para></listitem>
 			</varlistentry>
 		</variablelist>
 

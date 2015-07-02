@@ -29,7 +29,7 @@
 		<variablelist>
 			<varlistentry>
 				<term>indices</term>
-				<para>An array indicating the indices of the rows to be deleted.</para>
+				<listitem><para>An array indicating the indices of the rows to be deleted.</para></listitem>
 			</varlistentry>
 		</variablelist>
 
