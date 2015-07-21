@@ -14,7 +14,7 @@ Tested with Symphony 5.5.6 and Scilab 5.5.2
    successfully.
 5. If you have installed Symphony locally just for a single user (in /home/),
    then first edit builder.sce and change the LINKER_FLAGS variable as
-   explained in the comment there. Then run `exec builder.sce1`.
+   explained in the comment there. Then run `exec builder.sce`.
 
 ## To use:
 1. In Scilab, change the working directory to the root directory of the
